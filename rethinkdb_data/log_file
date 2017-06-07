@@ -1,0 +1,18 @@
+2017-06-06T21:07:43.404378994 0.275788s notice: Recursively removing directory /home/split/Documents/Projects/fling/rethinkdb_data/tmp
+2017-06-06T21:07:43.442817694 0.314226s notice: Initializing directory /home/split/Documents/Projects/fling/rethinkdb_data
+2017-06-06T21:07:43.442928055 0.314335s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/split/Documents/Projects/fling/rethinkdb_data' did not already exist or is empty.)
+2017-06-06T21:07:43.442954755 0.314362s notice: Running rethinkdb 2.3.5 (GCC 5.4.0)...
+2017-06-06T21:07:43.455515565 0.326925s notice: Running on Linux 4.10.13-1-ARCH x86_64
+2017-06-06T21:07:43.455570558 0.326977s notice: Loading data from directory /home/split/Documents/Projects/fling/rethinkdb_data
+2017-06-06T21:07:43.802695263 0.674102s info: Automatically using cache size of 1581 MB
+2017-06-06T21:07:43.803533651 0.674941s notice: Listening for intracluster connections on port 29015
+2017-06-06T21:07:43.809992513 0.681400s notice: Listening for client driver connections on port 28015
+2017-06-06T21:07:43.810156577 0.681564s notice: Listening for administrative HTTP connections on port 8080
+2017-06-06T21:07:43.810159897 0.681567s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2017-06-06T21:07:43.810163961 0.681571s notice: Listening on driver addresses: 127.0.0.1, ::1
+2017-06-06T21:07:43.810166064 0.681573s notice: Listening on http addresses: 127.0.0.1, ::1
+2017-06-06T21:07:43.810170108 0.681577s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2017-06-06T21:07:43.810173554 0.681580s notice: Server ready, "SplitLaptop_r8v" b8dc30d6-343e-4181-85bd-1ac208f75034
+2017-06-06T21:14:27.035362659 403.906770s info: Table 4f1a79bd-afe2-4f79-bffa-33716d07d5dc: Added replica on this server.
+2017-06-06T21:14:27.035402505 403.906809s info: Table 4f1a79bd-afe2-4f79-bffa-33716d07d5dc: Starting a new Raft election for term 1.
+2017-06-06T21:14:27.071599422 403.943007s info: Table 4f1a79bd-afe2-4f79-bffa-33716d07d5dc: This server is Raft leader for term 1. Latest log index is 0.
