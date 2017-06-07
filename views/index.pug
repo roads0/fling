@@ -3,8 +3,9 @@ extends layout
 block content
   link(href='/static/styles.css', rel='stylesheet')
   script(src='https://momentjs.com/downloads/moment.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/superagent/3.5.2/superagent.js')
   link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN', crossorigin='anonymous')
-  #container(style='filter: blur(25px); background: url(\'https://splitpixl.xyz/assets/images/paloose.jpg\');')
+  #container(style='filter: blur(10px); background: url(\'https://splitpixl.xyz/assets/images/paloose.jpg\');')
   //  video#bgvid.videobcg(preload='auto', autoplay='true', loop='loop', muted='muted', volume='0')
   //    source(src='https://img.splitpixl.xyz/video.mp4', type='video/mp4')
   //    |     Sorry, your browser does not support HTML5 video.
@@ -41,4 +42,11 @@ block content
       input#search(type='text', onkeydown='search(event)')
       a(href='#', onclick="window.location = 'https://google.com/search?q=' + encodeURIComponent(document.getElementById('search').value)")
         i.fa.fa-search.icon(aria-hidden='true')
+    #weather
+      h2 Loading...
+    a.settingsbtn(href='#' onclick='openSettings()')
+      i.fa.fa-gear.iconcog(aria-hidden='true')
+  #settings
+    h2 Settings
+      
     script(src='/static/main.js')

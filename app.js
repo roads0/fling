@@ -28,6 +28,7 @@ passport.deserializeUser((obj, done) => {
 });
 
 app.use('/', require('./routes/index.js'))
+app.use('/api', require('./routes/api.js'))
 app.use('/auth', require('./routes/auth.js'))
 app.use('/static', express.static('./static'))
 

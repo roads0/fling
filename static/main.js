@@ -36,3 +36,16 @@ function todo(e) {
     document.getElementById("addtodo").value = ""
   }
 }
+
+if (localStorage.location) {
+  superagent.get('/api/weather/' + localStorage.location).end((err, res) => {
+    document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
+  })
+} else {
+  document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
+}
+
+function openSettings() {
+  document.getElementById('settings').style['margin-left'] = '50%';
+  document.getElementById('settings').style['margin-top'] = '25%';
+}
