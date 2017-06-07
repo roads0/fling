@@ -50,8 +50,7 @@ function openSettings() {
   document.getElementById('settings').style['margin-top'] = '25%';
 }
 
-var slideTimeout = localStorage.swapTime; // in seconds
-var slideTimeout = 1; //remove this when integrated fully
+var slideTimeout = localStorage.swapTime || 30; // in seconds
 var imagebank = localStorage.images;
 
 rotationNation();
@@ -60,6 +59,9 @@ function rotationNation() {
   var i;
   for (i = 0; i < imagebank.length; i++) {
     document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
+  }
+  if (i >= imagebank.length) {
+    i = 0
   }
   setTimeout(rotationNation, slideTimeout*1000)
 }
