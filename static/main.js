@@ -49,3 +49,17 @@ function openSettings() {
   document.getElementById('settings').style['margin-left'] = '50%';
   document.getElementById('settings').style['margin-top'] = '25%';
 }
+
+var slideTimeout = localStorage.swapTime; // in seconds
+var slideTimeout = 1; //remove this when integrated fully
+var imagebank = localStorage.images;
+
+rotationNation();
+
+function rotationNation() {
+  var i;
+  for (i = 0; i < imagebank.length; i++) {
+    document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
+  }
+  setTimeout(rotationNation, slideTimeout*1000)
+}
