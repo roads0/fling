@@ -1,0 +1,159 @@
+extends layout
+
+block content
+  script(src='https://momentjs.com/downloads/moment.js')
+  link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN', crossorigin='anonymous')
+  style.
+    @import url('https://fonts.googleapis.com/css?family=Roboto:100,200,400');
+    html {
+    font-family: 'Roboto', sans-serif;
+    background-color: #333
+    }
+    #container {
+    width:100%;
+    height:100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    position: fixed;
+    overflow: hidden;
+    background-color: #222;
+    transition: 1.5s;
+    }
+    .videobcg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+    .section-vid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    }
+    .button {
+    border: none;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 150%;
+    margin: 6px 12px;
+    cursor: pointer;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    transition: 0.5s
+    }
+    .button:hover {
+    border-bottom: 2px solid rgba(255,255,255,1);
+    transition: 0.5s
+    }
+    .conn {
+    text-align: center;
+    }
+    #ctrl-button {
+    opacity: 0;
+    transition: 1.5s;
+    margin-left:auto;margin-right:auto;
+    white-space: nowrap;
+    }
+    #title {
+    font-weight: 100;
+    font-size: 750%;
+    transition: 1s;
+    color: rgba(255, 255, 255, 0);
+    margin: 0px
+    }
+    #offset {
+    height: 20%;
+    transition: 1.5s;
+    }
+    #date {
+    margin-top: 0;
+    color: rgba(255, 255, 255, 0);
+    font-size: 125%;
+    font-weight: 200;
+    }
+    input[type=text] {
+    width: 80%;
+    padding: 6px 10px;
+    margin: 2px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    font-size: 100%;
+    color: #FFF;
+    margin-right: 0;
+    }
+    .search {
+    position: relative;
+    z-index: 1;
+    left: -25px;
+    top: 1px;
+    color: #fff;
+    width: 0;
+    }
+    .searchbtn {
+    padding: 6px 10px;
+    margin: 2px;
+    border-radius: 0px 6px 6px 0px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-left: 2px solid #fff;
+    font-size: 95%;
+    color: #FFF;
+    text-decoration: none;
+    margin-left: 0;
+    }
+    *:focus {
+    outline: none;
+    }
+  #container(style='filter: blur(25px);')
+    video#bgvid.videobcg(preload='auto', autoplay='true', loop='loop', muted='muted', volume='0')
+      source(src='https://img.splitpixl.xyz/video.mp4', type='video/mp4')
+      |     Sorry, your browser does not support HTML5 video.
+  .section-vid
+    .conn
+      h1#title ?:?? ??
+      p#date Today
+      #offset
+      #ctrl-button
+        // <input type="text"></input><a href="#" class="searchbtn">Search<!- <i class="fa fa-search" aria-hidden="true"></i> -></a>
+        input#search(type='text', onkeydown='search(event)')
+        a(href='#', onclick="window.location = 'https://google.com/search?q=' + encodeURIComponent(document.getElementById('search').value)")
+          i.fa.fa-search.search(aria-hidden='true')
+        //
+          <a href="https://inbox.google.com/" class="button">Inbox</a>
+          <a href="https://github.com/" class="button">Github</a>
+    script.
+      document.getElementById("search").value = ""
+      var vid = document.getElementById("bgvid");
+      vid.onplay = function() {
+      setTimeout(showmenu() , 5000);
+      }
+      function showmenu() {
+      document.getElementById("title").style.color = "#fff"
+      document.getElementById("date").style.color = "#fff"
+      document.getElementById("offset").style.height = "0px"
+      document.getElementById("container").style.webkitFilter  = "blur(25px)"
+      document.getElementById("ctrl-button").style.opacity = "1"
+      }
+      function watchvid() {
+      document.getElementById("title").style.color = "rgba(0,0,0,0)"
+      document.getElementById("offset").style.height = "20%"
+      document.getElementById("container").style.webkitFilter  = "blur(0px)"
+      document.getElementById("ctrl-button").style.opacity = "0"
+      }
+      setInterval(function() {
+      document.getElementById("title").innerHTML = moment().format('h:mm A')
+      document.getElementById("date").innerHTML = moment().format('dddd, MMMM Do, YYYY')
+      }, 500);
+      function search(e) {
+      if (e.keyCode == 13) {
+      window.location = "https://google.com/search?q=" + encodeURIComponent(document.getElementById("search").value)
+      }
+      }

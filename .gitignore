@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# ono don't leak the api keys
+config.json
