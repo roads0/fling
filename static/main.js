@@ -51,17 +51,18 @@ function openSettings() {
 }
 
 var slideTimeout = localStorage.swapTime || 30; // in seconds
-var imagebank = localStorage.images;
+var imagebank = localStorage.images || ['https://splitpixl.xyz/assets/images/paloose.jpg', ];
 
 rotationNation();
 
+var i;
+
 function rotationNation() {
-  var i;
-  for (i = 0; i < imagebank.length; i++) {
-    document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
-  }
+  document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
   if (i >= imagebank.length) {
     i = 0
+  } else {
+    i++
   }
   setTimeout(rotationNation, slideTimeout*1000)
 }
