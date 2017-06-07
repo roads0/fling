@@ -4,6 +4,13 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const config = require('../config');
 const auth = express.Router();
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
 passport.use(new GoogleStrategy({
     clientID: config.oauth.clientID,
     clientSecret: config.oauth.clientSecret,
@@ -13,17 +20,6 @@ passport.use(new GoogleStrategy({
     return cb(null, profile);
   }
 ));
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
-
-auth.use(passport.initialize());
-auth.use(passport.session());
 
 auth.get('/',
   passport.authenticate('google', { scope: ['profile'] }),

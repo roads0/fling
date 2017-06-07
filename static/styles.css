@@ -1,0 +1,141 @@
+
+  @import url('https://fonts.googleapis.com/css?family=Roboto:100,200,400');
+html {
+  font-family: 'Roboto', sans-serif;
+  background-color: #333
+}
+#container {
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  position: fixed;
+  overflow: hidden;
+  background-color: #222;
+  transition: 1.5s;
+}
+.videobcg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.section-vid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.section-accesseries {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display:flex;
+}
+.button {
+  border: none;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 150%;
+  margin: 6px 12px;
+  cursor: pointer;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  transition: 0.5s
+}
+.button:hover {
+  border-bottom: 2px solid rgba(255,255,255,1);
+  transition: 0.5s
+  }
+.conn {
+  text-align: center;
+}
+#ctrl-button {
+  position: absolute;
+  margin-left:auto;margin-right:auto;
+  white-space: nowrap;
+  z-index: 6;
+  top: 12px;
+  right: 12px;
+}
+#title {
+  font-weight: 100;
+  font-size: 750%;
+  transition: 1s;
+  color: rgba(255, 255, 255, 0);
+  margin: 0px
+}
+#offset {
+  height: 20%;
+  transition: 1.5s;
+}
+#date {
+  margin-top: 0;
+  color: rgba(255, 255, 255, 0);
+  font-size: 125%;
+  font-weight: 200;
+  }
+input[type=text]#search {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 2px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  font-size: 100%;
+  color: #FFF;
+  margin-right: 0;
+}
+.icon {
+  position: relative;
+  z-index: 1;
+  left: -25px;
+  top: 1px;
+  color: #fff;
+  width: 0;
+}
+  .searchbtn {
+  padding: 6px 10px;
+  margin: 2px;
+  border-radius: 0px 6px 6px 0px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-left: 2px solid #fff;
+  font-size: 95%;
+  color: #FFF;
+  text-decoration: none;
+  margin-left: 0;
+  }
+  *:focus {
+  outline: none;
+  }
+.todo {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 5;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.addtodo {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  border-bottom: 2px solid #fff;
+  margin: 2px;
+  color: #FFF;
+  font-size: 100%;
+  width: 98.73%;
+  color: #FFF;
+}
