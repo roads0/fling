@@ -50,19 +50,20 @@ function openSettings() {
   document.getElementById('settings').style['margin-top'] = '25%';
 }
 
-var slideTimeout = localStorage.swapTime || 30; // in seconds
-var imagebank = localStorage.images || ['https://splitpixl.xyz/assets/images/paloose.jpg', ];
+var slideTimeout = localStorage.swapTime || 15; // in seconds
+var imagebank = JSON.parse(localStorage.images) || ['https://splitpixl.xyz/assets/images/paloose.jpg', 'http://i.imgur.com/jgh1fin.jpg', 'http://i.imgur.com/fiRAOFe.jpg', 'http://i.imgur.com/SIk9LkV.jpg'];
 
 rotationNation();
 
-var i;
+var i = 0;
 
 function rotationNation() {
-  document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
-  if (i >= imagebank.length) {
+  if (i == imagebank.length - 1) {
     i = 0
   } else {
     i++
   }
+  console.log(`url(${imagebank[i]})`)
+  document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
   setTimeout(rotationNation, slideTimeout*1000)
 }
