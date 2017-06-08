@@ -17,7 +17,13 @@ passport.use(new GoogleStrategy({
     callbackURL: config.oauth.callbackURL
   },
   function(accessToken, refreshToken, profile, cb) {
-    return cb(null, profile);
+    let user = profile
+    user.googleid = user.id
+    user.id = undefined
+    r.table("users").insert(user, {conflict: "update"}).run().then(result => {
+      user.id = result['generated_keys'][0]
+      return cb(null, user);
+    })
   }
 ));
 
@@ -25,9 +31,7 @@ auth.get('/',
   passport.authenticate('google', { scope: ['profile'] }),
   function(req, res) {
     // Successful authentication, redirect home.
-    console.log('yay')
-    console.log(req.user)
-    res.redirect('/');
+    res.json(req.user);
   });
 
 module.exports = auth

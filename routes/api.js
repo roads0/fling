@@ -10,8 +10,6 @@ const reddit = new snoowrap({
   refreshToken: config.snoowrap.refresh_token
 });
 
-
-
 api.get('/weather/:place', (req, res) => {
   weather.find({search: req.params.place, degreeType: 'F'}, function (err, result) {
     if(err) console.log(err)
@@ -21,6 +19,7 @@ api.get('/weather/:place', (req, res) => {
 module.exports = api
 
 api.get('/background', (req, res) => {
-  var topData = reddit.getSubreddit('EarthPorn').getTop({time: 'month'}).map(post => post.url)
-  topData.then(console.log)
+  reddit.getSubreddit('EarthPorn').getTop({time: 'month'}).then(data => {
+    res.json(data[Math.floor(Math.random() * data.length)])
+  })
 })
