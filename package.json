@@ -12,6 +12,7 @@
     "passport": "^0.3.2",
     "pug": "^2.0.0-rc.2",
     "rethinkdbdash": "^2.3.29",
+    "snoowrap": "^1.14.0",
     "weather-js": "^2.0.0"
   },
   "devDependencies": {},
