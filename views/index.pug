@@ -5,7 +5,7 @@ block content
   script(src='https://momentjs.com/downloads/moment.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/superagent/3.5.2/superagent.js')
   link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN', crossorigin='anonymous')
-  #container(style='filter: blur(10px); background: url(\'https://splitpixl.xyz/assets/images/paloose.jpg\');')
+  #container(style='filter: blur(5px); background: url(\'https://splitpixl.xyz/assets/images/paloose.jpg\');')
   //  video#bgvid.videobcg(preload='auto', autoplay='true', loop='loop', muted='muted', volume='0')
   //    source(src='https://img.splitpixl.xyz/video.mp4', type='video/mp4')
   //    |     Sorry, your browser does not support HTML5 video.
@@ -27,15 +27,12 @@ block content
           label(for='3') go to schol
         .makeeverythinggoodagain
           input(type='checkbox', name='4')
-          label(for='4') drop out
+          label(for='4') ???
         .makeeverythinggoodagain
           input(type='checkbox', name='5')
-          label(for='5') somehow make enough money to survive
-        .makeeverythinggoodagain
-          input(type='checkbox', name='6')
-          label(for='6') fail at life
+          label(for='5') profit
       .makeeverythinggoodagain
-        input#addtodo.addtodo(type='text', onkeydown='todo(event)')
+        input#addtodo.linetext(type='text', onkeydown='todo(event)')
         i.fa.fa-pencil.icon(aria-hidden='true')
     #ctrl-button
       input#search(type='text', onkeydown='search(event)')
@@ -43,9 +40,18 @@ block content
         i.fa.fa-search.icon(aria-hidden='true')
     #weather
       h2 Loading...
-    a.settingsbtn(href='#' onclick='openSettings()')
+    a.settingsbtn(href='#' onclick='settings()')
       i.fa.fa-gear.iconcog(aria-hidden='true')
   #settings
     h2 Settings
+    .option
+      p.label Location
+      input(type='text' placeholder='City or Postal Code' onkeyup='localStorage.location=event.srcElement.value').linetext
+    .option
+      p.label Background Rotation Interval
+      input(type='number' placeholder='(seconds)').linetext
+    .option
+      p.label Another Thing
+      input(type='text' placeholder='meow').linetext
       
     script(src='/static/main.js')

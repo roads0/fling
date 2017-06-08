@@ -45,25 +45,30 @@ if (localStorage.location) {
   document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
 }
 
-function openSettings() {
-  document.getElementById('settings').style['margin-left'] = '50%';
-  document.getElementById('settings').style['margin-top'] = '25%';
+function settings() {
+  if (document.getElementById('settings').style['margin-top'] == '23.5%') {
+    document.getElementById('settings').style['margin-top'] = '100%';
+  } else {
+    document.getElementById('settings').style['margin-top'] = '23.5%';
+  }
 }
 
-var slideTimeout = localStorage.swapTime || 15; // in seconds
-var imagebank = JSON.parse(localStorage.images) || ['https://splitpixl.xyz/assets/images/paloose.jpg', 'http://i.imgur.com/jgh1fin.jpg', 'http://i.imgur.com/fiRAOFe.jpg', 'http://i.imgur.com/SIk9LkV.jpg'];
+var imagebank
+try {
+  imagebank = JSON.parse(localStorage.images);
+} catch (e) {
+  imagebank = ['https://splitpixl.xyz/assets/images/paloose.jpg', 'http://i.imgur.com/jgh1fin.jpg', 'http://i.imgur.com/fiRAOFe.jpg', 'http://i.imgur.com/SIk9LkV.jpg']
+}
 
-rotationNation();
+var slideTimeout = localStorage.swapTime || 15;
 
-var i = 0;
-
-function rotationNation() {
+function rotationNation(i) {
   if (i == imagebank.length - 1) {
     i = 0
   } else {
     i++
   }
-  console.log(`url(${imagebank[i]})`)
   document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
-  setTimeout(rotationNation, slideTimeout*1000)
+  console.log(i)
+  setTimeout(rotationNation(i), 1000)
 }
