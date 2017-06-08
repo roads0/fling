@@ -147,6 +147,7 @@ input[type=text]#search {
 }
 .settingsbtn {
   position: absolute;
+  z-index: 12345; /* this does not work it is behind the panel */
   bottom: 12px;
   right: 12px;
   font-size: 24px;

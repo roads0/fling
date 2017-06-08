@@ -72,3 +72,14 @@ function rotationNation(i) {
   console.log(i)
   setTimeout(rotationNation(i), 1000)
 }
+
+function printValue(sliderID, textbox) {
+    var x = document.getElementById(textbox);
+    var y = document.getElementById(sliderID);
+    x.value = y.value;
+    document.getElementById('container').style.filter = `blur(${x.value}px)`
+}
+
+window.onload = function() {
+  printValue('blurSlide', 'blurVal');
+}
