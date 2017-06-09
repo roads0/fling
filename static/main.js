@@ -96,3 +96,11 @@ function printValue(sliderID, textbox) {
 window.onload = function() {
   printValue('blurSlide', 'blurVal');
 }
+
+function fillInValues() {
+  Object.keys(JSON.parse(localStorage.settings)).forEach((setting, index) => {
+    if (!document.getElementsByName(setting)[0] == undefined) {
+      document.getElementsByName(setting)[0].value = JSON.parse(localStorage.settings)[setting]
+    }
+  })
+}

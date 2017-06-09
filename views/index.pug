@@ -34,10 +34,10 @@ block content
       h2 Settings
       .option
         p.label Location
-        input(type='text' placeholder='City or Postal Code' onkeyup='localStorage.location=event.srcElement.value' name='location').linetext
+        input#locationZip(type='text' placeholder='City or Postal Code' onkeyup='localStorage.location=event.srcElement.value' name='location').linetext
       .option
         p.label Background Rotation Interval
-        input(type='number' placeholder='(seconds)' name='bgchange').linetext
+        input#backgroundInterval(type='number' placeholder='(seconds)' name='bgchange').linetext
       .option
         p.label Another Thing
         input(type='text' placeholder='meow').linetext
