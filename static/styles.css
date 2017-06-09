@@ -124,7 +124,7 @@ input[type=text]#search {
   left: 12px;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 5;
-  padding: 4px;
+  padding: 6px;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -202,4 +202,20 @@ p.label {
   font-size: 100%;
   width: 98.73%;
   color: #FFF;
+}
+
+.loadwrap {
+  width: 100%;
+  height: 120%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0px
+}
+
+.loader {
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  color: #fff;
 }

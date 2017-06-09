@@ -39,34 +39,31 @@ function todo(e) {
 
 if (localStorage.location) {
   superagent.get('/api/weather/' + JSON.parse(localStorage.settings).location).end((err, res) => {
-    document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
+    if(!err)
+      document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
+    else {
+      document.getElementById('weather').innerHTML = `<h2>Error getting weather</h2>`
+    }
   })
 } else {
   document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
 }
 
 function opensettings() {
-  console.log('on')
   document.getElementById('settings').open = true
   document.getElementById('settings').style['top'] = window.innerHeight - document.getElementById('settings').scrollHeight;
 }
 function closesettings() {
-  console.log('off')
   document.getElementById('settings').open = false
   document.getElementById('settings').style['top'] = '100%';
   var options = document.getElementsByClassName('option')
   var settings = {updated: new Date().toJSON()}
   var i=0,ii=0;
-  console.log('e')
   for (i=0; i<options.length; i++) {
-    console.log('ee')
-    console.log(options[i])
     var optionnodes = options[i].childNodes
     for(ii=0;ii<optionnodes.length; ii++) {
-      console.log(optionnodes[ii].tagName)
       if(optionnodes[ii].tagName == 'INPUT') {
         settings[optionnodes[ii].name] = optionnodes[ii].value
-        console.log(optionnodes[ii].name, optionnodes[ii].value)
       }
     }
   }
@@ -79,24 +76,14 @@ function closesettings() {
   }
 }
 
-var imagebank
-try {
-  imagebank = JSON.parse(localStorage.images);
-} catch (e) {
-  imagebank = ['https://splitpixl.xyz/assets/images/paloose.jpg', 'http://i.imgur.com/jgh1fin.jpg', 'http://i.imgur.com/fiRAOFe.jpg', 'http://i.imgur.com/SIk9LkV.jpg']
-}
+setInterval(rotationNation(), (JSON.parse(localStorage.settings).bgchange || 60) * 1000)
 
-var slideTimeout = localStorage.swapTime || 15;
-
-function rotationNation(i) {
-  if (i == imagebank.length - 1) {
-    i = 0
-  } else {
-    i++
-  }
-  document.getElementById("container").style["background-image"] = `url(${imagebank[i]})`
-  console.log(i)
-  setTimeout(rotationNation(i), 1000)
+function rotationNation() {
+  superagent.get('/api/background')
+  .set('Authorization', localStorage.auth)
+  .end((err,res) => {
+    document.getElementById("container").style["background-image"] = `url(${res.body.preview.images[0].source.url})`
+  })
 }
 
 function printValue(sliderID, textbox) {

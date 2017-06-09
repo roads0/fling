@@ -5,7 +5,7 @@ block content
   script(src='https://momentjs.com/downloads/moment.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/superagent/3.5.2/superagent.js')
   link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN', crossorigin='anonymous')
-  #container(style='background: url(\'https://splitpixl.xyz/assets/images/paloose.jpg\');')
+  #container()
   //  video#bgvid.videobcg(preload='auto', autoplay='true', loop='loop', muted='muted', volume='0')
   //    source(src='https://img.splitpixl.xyz/video.mp4', type='video/mp4')
   //    |     Sorry, your browser does not support HTML5 video.
@@ -16,21 +16,8 @@ block content
   .section-accesseries
     .todo
       .list#list
-        .makeeverythinggoodagain
-          input(type='checkbox', name='one')
-          label(for='one') eat breakfast
-        .makeeverythinggoodagain
-          input(type='checkbox', name='tw')
-          label(for='tw') brush teath
-        .makeeverythinggoodagain
-          input(type='checkbox', name='3')
-          label(for='3') go to schol
-        .makeeverythinggoodagain
-          input(type='checkbox', name='4')
-          label(for='4') leave
-        .makeeverythinggoodagain
-          input(type='checkbox', name='5')
-          label(for='5') profit
+        .loadwrap
+          i.fa.fa-refresh.fa-spin.fa-3x.fa-fw.loader
       .makeeverythinggoodagain
         input#addtodo.linetext(type='text', onkeydown='todo(event)')
         i.fa.fa-pencil.icon(aria-hidden='true')
