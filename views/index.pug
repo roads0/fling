@@ -39,12 +39,9 @@ block content
         p.label Background Rotation Interval
         input#backgroundInterval(type='number' placeholder='(seconds)' name='bgchange').linetext
       .option
-        p.label Another Thing
-        input(type='text' placeholder='meow').linetext
-      .option
         p.label Blur
         input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="printValue('blurSlide','blurVal')")
-        input#blurVal(type='text' size='2')
+        //input#blurVal(type='text' size='2')
     a.settingsbtn(href='#' onclick='closesettings()')
       i.fa.fa-times.iconcog(aria-hidden='true')
         

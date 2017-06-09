@@ -24,7 +24,7 @@ window.location = "https://google.com/search?q=" + encodeURIComponent(document.g
 }
 }
 function todo(e) {
-  if (e.keyCode == 13) {
+  if (e.keyCode == 13 && document.getElementById("addtodo").value) {
     var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
       return v.toString(16);
@@ -37,16 +37,18 @@ function todo(e) {
   }
 }
 
-if (localStorage.location) {
-  superagent.get('/api/weather/' + JSON.parse(localStorage.settings).location).end((err, res) => {
-    if(!err)
-      document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
-    else {
-      document.getElementById('weather').innerHTML = `<h2>Error getting weather</h2>`
-    }
-  })
-} else {
-  document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
+function getWeather() {
+  if (JSON.parse(localStorage.settings).location) {
+    superagent.get('/api/weather/' + JSON.parse(localStorage.settings).location).end((err, res) => {
+      if(!err)
+        document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
+      else {
+        document.getElementById('weather').innerHTML = `<h2>Error getting weather</h2>`
+      }
+    })
+  } else {
+    document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
+  }
 }
 
 function opensettings() {
@@ -57,7 +59,7 @@ function closesettings() {
   document.getElementById('settings').open = false
   document.getElementById('settings').style['top'] = '100%';
   var options = document.getElementsByClassName('option')
-  var settings = {updated: new Date().toJSON()}
+  var settings = {updated: new Date().getTime()}
   var i=0,ii=0;
   for (i=0; i<options.length; i++) {
     var optionnodes = options[i].childNodes
@@ -88,19 +90,31 @@ function rotationNation() {
 
 function printValue(sliderID, textbox) {
     var x = document.getElementById(textbox);
-    var y = document.getElementById(sliderID);
-    x.value = y.value;
+//    var y = document.getElementById(sliderID);
+//    x.value = y.value;
     document.getElementById('container').style.filter = `blur(${x.value}px)`
 }
 
 window.onload = function() {
-  printValue('blurSlide', 'blurVal');
+  getSettings()
+  fillInValues(JSON.parse(localStorage.settings))
 }
 
-function fillInValues() {
-  Object.keys(JSON.parse(localStorage.settings)).forEach((setting, index) => {
-    if (!document.getElementsByName(setting)[0] == undefined) {
-      document.getElementsByName(setting)[0].value = JSON.parse(localStorage.settings)[setting]
+function getSettings() {
+  var local = JSON.parse(localStorage.settings)
+  superagent.get('/api/settings')
+  .set('Authorization', localStorage.auth)
+  .end((err, res) => {
+    if(local.updated < res.body.updated) {
+      localStorage.settings = JSON.stringify(res.body)
+    }
+  })
+}
+
+function fillInValues(settings) {
+  Object.keys(settings).forEach((setting, index) => {
+    if (!!document.getElementsByName(setting)[0]) {
+      document.getElementsByName(setting)[0].value = settings[setting]
     }
   })
 }
