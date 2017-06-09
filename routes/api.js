@@ -10,6 +10,7 @@ const reddit = new snoowrap({
   clientSecret: config.snoowrap.client_secretS,
   refreshToken: config.snoowrap.refresh_token
 });
+const reddits = ['EarthPorn', 'SpacePorn', 'ExposurePorn']
 
 api.use(bodyParser.json());
 
@@ -21,7 +22,7 @@ api.get('/weather/:place', (req, res) => {
 })
 
 api.get('/background', (req, res) => {
-  reddit.getSubreddit('EarthPorn').getTop({time: 'month'}).then(data => {
+  reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'month'}).then(data => {
     res.json(data[Math.floor(Math.random() * data.length)])
   })
 })
