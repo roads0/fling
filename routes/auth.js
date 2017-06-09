@@ -20,11 +20,18 @@ passport.use(new GoogleStrategy({
     let user = profile
     user.googleid = user.id
     user.id = undefined
-    r.table("users").insert(user, {conflict: "update"}).run().then(result => {
-      user.id = result['generated_keys'][0]
-      r.table("settings").insert({id: result['generated_keys'][0]}, {conflict: "error"}).then(resul => {
+    r.db('fling').table('users').getAll(user.googleid, {index: "googleid"}).then(reslt => {
+      if (reslt == undefined) {
+        r.table("users").insert(user, {conflict: "update"}).run().then(result => {
+          user.id = result['generated_keys'][0]
+          r.table("settings").insert({id: result['generated_keys'][0]}, {conflict: "error"}).then(resul => {
+            return cb(null, user);
+          })
+        })
+      } else {
+        user.id = reslt[0].id
         return cb(null, user);
-      })
+      }
     })
   }
 ));

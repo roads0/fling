@@ -38,8 +38,8 @@ function todo(e) {
 }
 
 function getWeather() {
-  if (JSON.parse(localStorage.settings).location) {
-    superagent.get('/api/weather/' + JSON.parse(localStorage.settings).location).end((err, res) => {
+  if (userSettings().location) {
+    superagent.get('/api/weather/' + userSettings().location).end((err, res) => {
       if(!err)
         document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
       else {
@@ -78,7 +78,7 @@ function closesettings() {
   }
 }
 
-setInterval(rotationNation(), (JSON.parse(localStorage.settings).bgchange || 60) * 1000)
+setInterval(rotationNation(), (userSettings().bgchange || 60) * 1000)
 
 function rotationNation() {
   superagent.get('/api/background')
@@ -91,7 +91,7 @@ function rotationNation() {
 function blurSetting(sliderID) {
   var y;
   try {
-    var y = JSON.parse(localStorage.settings).blur;
+    var y = userSettings().blur;
   }
   catch (e) {}
 
@@ -104,17 +104,17 @@ function blurSetting(sliderID) {
 
 window.onload = function() {
   getSettings()
-  fillInValues(JSON.parse(localStorage.settings))
+  fillInValues(userSettings())
   getWeather()
   blurSetting()
 }
 
 function getSettings() {
-  var local = JSON.parse(localStorage.settings)
+  var local = userSettings()
   superagent.get('/api/settings')
   .set('Authorization', localStorage.auth)
   .end((err, res) => {
-    if(local.updated < res.body.updated) {
+    if(local.updated < res.body.updated || !res.body.updated) {
       localStorage.settings = JSON.stringify(res.body)
     }
   })
@@ -130,4 +130,12 @@ function fillInValues(settings) {
 
 function loginbchange() {
   console.log('sucess')
+}
+
+function userSettings() {
+  try {
+    return userSettings()
+  } catch (err) {
+    return {}
+  }
 }
