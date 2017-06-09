@@ -42,8 +42,12 @@ block content
         p.label Blur
         input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="printValue('blurSlide','blurVal')")
         //input#blurVal(type='text' size='2')
+      .option
+        p.label Background Sources (reddit)
+        input#reddits(type='text', placeholder='EarthPorn, SpacePorn, ExposurePorn' name='reddit').linetext
     a.settingsbtn(href='#' onclick='closesettings()')
       i.fa.fa-times.iconcog(aria-hidden='true')
-        
+    a.loginbtn(href='./auth' onclick='loginbchange()' )
+      p.labellogin Login        
         
     script(src='/static/main.js')
