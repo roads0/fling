@@ -22,7 +22,9 @@ passport.use(new GoogleStrategy({
     user.id = undefined
     r.table("users").insert(user, {conflict: "update"}).run().then(result => {
       user.id = result['generated_keys'][0]
-      return cb(null, user);
+      r.table("settings").insert({id: result['generated_keys'][0]}, {conflict: "error"}).then(resul => {
+        return cb(null, user);
+      })
     })
   }
 ));
@@ -31,7 +33,7 @@ auth.get('/',
   passport.authenticate('google', { scope: ['profile'] }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.json(req.user);
+    res.send(`<script>localStorage.auth='${req.user.id}';window.location='/'</script>`);
   });
 
 module.exports = auth

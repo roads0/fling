@@ -145,6 +145,9 @@ input[type=text]#search {
   left: 12px;
   color: #fff;
 }
+label {
+  color: #fff
+}
 .settingsbtn {
   position: absolute;
   z-index: 12345; /* this does not work it is behind the panel */
@@ -167,15 +170,18 @@ input[type=text]#search {
 #settings {
   position: absolute;
   z-index: 15;
-  width: 47.5%;
-  height: 48%;
+  width: 50%;
+  min-height: 50%;
   background-color: rgba(0, 0, 0, 0.9);
-  margin-top: 100%;
-  margin-left: 50%;
-  border-radius: 6px;
   transition: 0.5s;
   color: #fff;
-  padding: 12px;
+  /*padding: 12px;*/
+  top: 100%;
+  left: 50%;
+  border-top-left-radius: 6px;
+}
+#settings .wrap {
+  margin: 12px
 }
 p.label {
   margin: 3px 0px 6px 1px;

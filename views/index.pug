@@ -27,7 +27,7 @@ block content
           label(for='3') go to schol
         .makeeverythinggoodagain
           input(type='checkbox', name='4')
-          label(for='4') ???
+          label(for='4') leave
         .makeeverythinggoodagain
           input(type='checkbox', name='5')
           label(for='5') profit
@@ -40,23 +40,26 @@ block content
         i.fa.fa-search.icon(aria-hidden='true')
     #weather
       h2 Loading...
-    a.settingsbtn(href='#' onclick='settings()')
+    a.settingsbtn(href='#' onclick='opensettings()')
       i.fa.fa-gear.iconcog(aria-hidden='true')
-  #settings
-    h2 Settings
-    .option
-      p.label Location
-      input(type='text' placeholder='City or Postal Code' onkeyup='localStorage.location=event.srcElement.value').linetext
-    .option
-      p.label Background Rotation Interval
-      input(type='number' placeholder='(seconds)').linetext
-    .option
-      p.label Another Thing
-      input(type='text' placeholder='meow').linetext
-    .option
-      p.label Blur
-      input#blurSlide(type='range', min='0', max='25', step='1', onchange="printValue('blurSlide','blurVal')")
-      input#blurVal(type='text' size='2')
+  #settings()
+    .wrap
+      h2 Settings
+      .option
+        p.label Location
+        input(type='text' placeholder='City or Postal Code' onkeyup='localStorage.location=event.srcElement.value' name='location').linetext
+      .option
+        p.label Background Rotation Interval
+        input(type='number' placeholder='(seconds)' name='bgchange').linetext
+      .option
+        p.label Another Thing
+        input(type='text' placeholder='meow').linetext
+      .option
+        p.label Blur
+        input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="printValue('blurSlide','blurVal')")
+        input#blurVal(type='text' size='2')
+    a.settingsbtn(href='#' onclick='closesettings()')
+      i.fa.fa-times.iconcog(aria-hidden='true')
         
         
     script(src='/static/main.js')

@@ -38,18 +38,44 @@ function todo(e) {
 }
 
 if (localStorage.location) {
-  superagent.get('/api/weather/' + localStorage.location).end((err, res) => {
+  superagent.get('/api/weather/' + JSON.parse(localStorage.settings).location).end((err, res) => {
     document.getElementById('weather').innerHTML = `<h2>${res.body.location.name}</h2><p>${res.body.current.temperature}, ${res.body.current.skytext}</p>`
   })
 } else {
   document.getElementById('weather').innerHTML = '<h2>No Location Set</h2>'
 }
 
-function settings() {
-  if (document.getElementById('settings').style['margin-top'] == '23.5%') {
-    document.getElementById('settings').style['margin-top'] = '100%';
-  } else {
-    document.getElementById('settings').style['margin-top'] = '23.5%';
+function opensettings() {
+  console.log('on')
+  document.getElementById('settings').open = true
+  document.getElementById('settings').style['top'] = window.innerHeight - document.getElementById('settings').scrollHeight;
+}
+function closesettings() {
+  console.log('off')
+  document.getElementById('settings').open = false
+  document.getElementById('settings').style['top'] = '100%';
+  var options = document.getElementsByClassName('option')
+  var settings = {updated: new Date().toJSON()}
+  var i=0,ii=0;
+  console.log('e')
+  for (i=0; i<options.length; i++) {
+    console.log('ee')
+    console.log(options[i])
+    var optionnodes = options[i].childNodes
+    for(ii=0;ii<optionnodes.length; ii++) {
+      console.log(optionnodes[ii].tagName)
+      if(optionnodes[ii].tagName == 'INPUT') {
+        settings[optionnodes[ii].name] = optionnodes[ii].value
+        console.log(optionnodes[ii].name, optionnodes[ii].value)
+      }
+    }
+  }
+  localStorage.settings = JSON.stringify(settings)
+  if (localStorage.auth){
+    superagent.post('/api/settings')
+     .send(settings)
+     .set('Authorization', localStorage.auth)
+     .end()
   }
 }
 
