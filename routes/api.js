@@ -51,4 +51,16 @@ api.get('/settings', (req, res) => {
   }
 })
 
+api.get('/user', (req, res) => {
+  if(req.get('Authorization')) {
+    r.table('users').get(req.get('Authorization')).then(result => {
+      res.json(result)
+    }).catch((err) => {
+      res.json({status: 'Error', error: err})
+    })
+  } else {
+    res.status(401).json({status: 'Error', error: 'Unauthorized'})
+  }
+})
+
 module.exports = api
