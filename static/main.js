@@ -105,13 +105,6 @@ function blurSetting(sliderID) {
 window.onload = function() {
   getSettings()
   fillInValues(JSON.parse(localStorage.settings))
-  printValue()
-}
-
-
-window.onload = function() {
-  getSettings()
-  fillInValues(JSON.parse(localStorage.settings))
   getWeather()
   blurSetting()
 }
