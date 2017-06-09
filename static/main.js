@@ -88,17 +88,32 @@ function rotationNation() {
   })
 }
 
-function printValue(sliderID, textbox) {
-    var x = document.getElementById(textbox);
-//    var y = document.getElementById(sliderID);
-//    x.value = y.value;
-    document.getElementById('container').style.filter = `blur(${x.value}px)`
+function blurSetting(sliderID) {
+  var y;
+  try {
+    var y = JSON.parse(localStorage.settings).blur;
+  }
+  catch (e) {}
+
+  if (document.getElementById('blurSlide').value !== y) {
+    y = document.getElementById('blurSlide').value
+  }
+
+  document.getElementById('container').style.filter = `blur(${y}px)`
 }
 
 window.onload = function() {
   getSettings()
   fillInValues(JSON.parse(localStorage.settings))
+  printValue()
+}
+
+
+window.onload = function() {
+  getSettings()
+  fillInValues(JSON.parse(localStorage.settings))
   getWeather()
+  blurSetting()
 }
 
 function getSettings() {
