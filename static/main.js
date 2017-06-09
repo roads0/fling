@@ -98,6 +98,7 @@ function printValue(sliderID, textbox) {
 window.onload = function() {
   getSettings()
   fillInValues(JSON.parse(localStorage.settings))
+  getWeather()
 }
 
 function getSettings() {
