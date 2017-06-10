@@ -136,7 +136,7 @@ function loginbchange() {
     superagent.get('/api/user')
     .set('Authorization', localStorage.auth)
     .end((err, res) => {
-      console.log(res)
+      // console.log(res)
       document.getElementById('userimg').src = res.body.photos[0].value
       document.getElementById('username').innerHTML = res.body.displayName
     })
