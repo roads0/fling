@@ -22,9 +22,25 @@ api.get('/weather/:place', (req, res) => {
 })
 
 api.get('/background', (req, res) => {
-  reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'month'}).then(data => {
-    res.json(data[Math.floor(Math.random() * data.length)])
+  if(req.get('Authorization')) {
+    r.table('settings').get(req.get('Authorization')).then(result => {
+      var customstring = result.reddit;
+      customstring = customstring.replace(/\s/g, '');
+      var customreddits = customstring.split(',');
+      reddit.getSubreddit(customreddits[Math.floor(Math.random()*customreddits.length)]).getTop({time: 'week'}).then(data => {
+      res.json(data[Math.floor(Math.random() * data.length)])
+    }).catch(e => {
+      console.log(e + "invalid reddit")
+      reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
+      res.json(data[Math.floor(Math.random() * data.length)])
+      })
+    })
   })
+} else {
+    reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
+    res.json(data[Math.floor(Math.random() * data.length)])
+    })
+  }
 })
 
 api.post('/settings', (req, res) => {
