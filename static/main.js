@@ -129,6 +129,13 @@ function fillInValues(settings) {
 function loginbchange() {
   if (localStorage.auth) {
     document.getElementById('userstats').style='visibility: visible;'
+    superagent.get('/api/user')
+    .set('Authorization', localStorage.auth)
+    .end((err, res) => {
+      console.log(res)
+      document.getElementById('userimg').src = res.body.photos[0].value
+      document.getElementById('username').innerHTML = res.body.displayName
+    })
   } else {
     document.getElementById('loginbutton').style='visibility: visible;'
   }

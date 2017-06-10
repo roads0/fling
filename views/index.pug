@@ -39,16 +39,16 @@ block content
         p.label Background Rotation Interval
         input#backgroundInterval(type='number' placeholder='(seconds)' name='bgchange').linetext
       .option
-        p.label Blur
-        input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="blurSetting()")
-        //input#blurVal(type='text' size='2')
-      .option
         p.label Background Sources (reddit)
         input#reddits(type='text', placeholder='EarthPorn, SpacePorn, ExposurePorn' name='reddit').linetext
+      .option
+        p.label Blur
+        input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="blurSetting()")
     a.settingsbtn(href='#' onclick='closesettings()')
       i.fa.fa-times.iconcog(aria-hidden='true')
-    a.userstats#userstats(style='visibility: hidden;')
-      //- make style
+    a#userstats(style='visibility: hidden;')
+      img.userimg#userimg()
+      p.username#username
     a.loginbtn#loginbutton(href='./auth' onclick='loginbchange()' style='visibility: hidden;')
       p.labellogin Login        
         
