@@ -1,0 +1,87 @@
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Fling</title>
+</head>
+<body>
+  <link href="/static/styles.css" rel="stylesheet"/>
+  <script src="moment.js"></script>
+  <script src="superagent.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
+  <div id="container">
+  </div>
+  <!--  video#bgvid.videobcg(preload='auto', autoplay='true', loop='loop', muted='muted', volume='0')--><!--    source(src='https://img.splitpixl.xyz/video.mp4', type='video/mp4')--><!--    |     Sorry, your browser does not support HTML5 video.-->
+  <div class="section-vid">
+    <div class="conn">
+      <h1 id="title">?:?? ??</h1>
+      <p id="date">Today</p>
+    </div>
+  </div>
+  <div class="section-accesseries">
+    <div class="todo">
+      <div class="list" id="list">
+        <div class="loadwrap">
+          <i class="fa fa-refresh fa-spin fa-3x fa-fw loader">
+          </i>
+        </div>
+      </div>
+      <div class="makeeverythinggoodagain">
+        <input class="linetext" id="addtodo" type="text" onkeydown="todo(event)"/>
+        <i class="fa fa-pencil icon" aria-hidden="true">
+        </i>
+      </div>
+    </div>
+    <div id="ctrl-button">
+      <input id="search" type="text" onkeydown="search(event)"/>
+      <a href="#" onclick="window.location = 'https://google.com/search?q=' + encodeURIComponent(document.getElementById('search').value)">
+        <i class="fa fa-search icon" aria-hidden="true">
+        </i>
+      </a>
+    </div>
+    <div id="weather">
+      <h2>Loading...</h2>
+    </div>
+    <a class="settingsbtn" href="#" onclick="opensettings()">
+      <i class="fa fa-gear iconcog" aria-hidden="true">
+      </i>
+    </a>
+  </div>
+  <div id="settings">
+    <div class="wrap">
+      <h2>Settings</h2>
+      <div class="option">
+        <p class="label">Location</p>
+        <input class="linetext" id="locationZip" type="text" placeholder="City or Postal Code" onkeyup="localStorage.location=event.srcElement.value" name="location"/>
+      </div>
+      <div class="option">
+        <p class="label">Background Rotation Interval</p>
+        <input class="linetext" id="backgroundInterval" type="number" placeholder="(seconds)" name="bgchange"/>
+      </div>
+      <div class="option">
+        <p class="label">Background Sources (reddit)</p>
+        <input class="linetext" id="reddits" type="text" placeholder="EarthPorn, SpacePorn, ExposurePorn" name="reddit"/>
+      </div>
+      <div class="option">
+        <p class="label">Blur</p>
+        <input id="blurSlide" type="range" min="0" max="25" step="1" name="blur" onchange="blurSetting()"/>
+      </div>
+    </div>
+    <a class="settingsbtn" href="#" onclick="closesettings()">
+      <i class="fa fa-times iconcog" aria-hidden="true">
+      </i>
+    </a>
+    <a id="userstats" style="visibility: hidden;">
+      <img class="userimg" id="userimg"/>
+      <p class="username" id="username">
+      </p>
+    </a>
+    <a class="loginbtn" id="loginbutton" href="./auth" onclick="loginbchange()" style="visibility: hidden;">
+      <p class="labellogin">Login</p>
+    </a>
+    <script src="/static/main.js">
+    </script>
+  </div>
+</body>
+</html>
