@@ -73,6 +73,61 @@ api.get('/settings', (req, res) => {
   }
 })
 
+api.post('/todo', (req, res) => {
+  if(req.get('Authorization')) {
+    r.table('todos').get(req.get('Authorization')).then(rslt => {
+      let id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16); // TODO: do a thing make this better
+      });
+      var list = rslt
+      if (rslt != null) {
+        list.id = req.get('Authorization')
+        list.todos[id] = req.body.value
+      } else {
+        list = {id: req.get('Authorization'), todos: {}}
+        list.todos[id] = req.body.value
+      }
+      r.table('todos').insert(list, {conflict: "update"}).then((result) => {
+        list.id = undefined
+        res.json(list.todos)
+      }).catch((err) => {
+        res.json({status: 'Error', error: err})
+      })
+    })
+  } else {
+    res.status(401).json({status: 'Error', error: 'Unauthorized'})
+  }
+})
+
+api.get('/todo', (req, res) => {
+  if(req.get('Authorization')) {
+    r.table('todos').get(req.get('Authorization')).then(result => {
+      res.json(result.todos)
+    }).catch((err) => {
+      res.json({status: 'Error', error: err})
+    })
+  } else {
+    res.status(401).json({status: 'Error', error: 'Unauthorized'})
+  }
+})
+
+api.delete('/todo/:id', (req, res) => {
+  if(req.get('Authorization')) {
+    r.table('todos').get(req.get('Authorization')).then(rslt => {
+      var list = rslt
+      list.todos[req.params.id] = undefined
+      r.table('todos').get(req.get('Authorization')).update(list).then((result) => {
+        res.status(204).send()
+      }).catch((err) => {
+        res.json({status: 'Error', error: err})
+      })
+    })
+  } else {
+    res.status(401).json({status: 'Error', error: 'Unauthorized'})
+  }
+})
+
 api.get('/user', (req, res) => {
   if(req.get('Authorization')) {
     r.table('users').get(req.get('Authorization')).then(result => {

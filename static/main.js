@@ -20,15 +20,18 @@ window.location = "https://google.com/search?q=" + encodeURIComponent(document.g
 }
 function todo(e) {
   if (e.keyCode == 13 && document.getElementById("addtodo").value) {
-    var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-      return v.toString(16);
-    });
-    var nextup = `
-      <div class="makeeverythinggoodagain"><input type="checkbox" name="${id}"><label for="${id}">${document.getElementById("addtodo").value}</label></div>
-    `
-    document.getElementById('list').innerHTML += nextup
+    var ietm = document.getElementById("addtodo").value
     document.getElementById("addtodo").value = ""
+    superagent.post('/api/todo')
+    .send({value: ietm})
+    .set('Authorization', localStorage.auth)
+    .end((err, res) => {
+      document.getElementById('list').innerHTML = ""
+      Object.keys(res.body).forEach(item => {
+        var nextup = `<div class="makeeverythinggoodagain"><input type="checkbox" name="${item}"><label for="${item}">${res.body[item]}</label></div>`
+        document.getElementById('list').innerHTML += nextup
+      })
+    })
   }
 }
 
@@ -105,6 +108,7 @@ window.onload = function() {
   getWeather()
   blurSetting()
   loginbchange()
+  todos()
 }
 
 function getSettings() {
@@ -139,6 +143,26 @@ function loginbchange() {
   } else {
     document.getElementById('loginbutton').style='visibility: visible;'
   }
+}
+
+function todos() {
+  superagent.get('/api/todo')
+  .set('Authorization', localStorage.auth)
+  .end((err, res) => {
+    document.getElementById('list').innerHTML = ""
+    Object.keys(res.body).forEach(item => {
+      var nextup = `<div class="makeeverythinggoodagain"><input type="checkbox" name="${item}" onclick="removeTodo('${item}')"><label for="${item}">${res.body[item]}</label></div>`
+      document.getElementById('list').innerHTML += nextup
+    })
+  })
+}
+
+function removeTodo(id) {
+  superagent.del(`/api/todo/${id}`)
+  .set('Authorization', localStorage.auth)
+  .end((err, res) => {
+    todos()
+  })
 }
 
 function userSettings() {
