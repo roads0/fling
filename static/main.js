@@ -1,5 +1,5 @@
+/* eslint-env browser */
 document.getElementById("search").value = ""
-var vid = document.getElementById("bgvid");
 //vid.onplay = function() {
 setTimeout(showmenu() , 500);
 //}
@@ -8,11 +8,6 @@ document.getElementById("title").style.color = "#fff"
 document.getElementById("date").style.color = "#fff"
 document.getElementById("container").style.webkitFilter  = "blur(25px)"
 document.getElementById("ctrl-button").style.opacity = "1"
-}
-function watchvid() {
-document.getElementById("title").style.color = "rgba(0,0,0,0)"
-document.getElementById("container").style.webkitFilter  = "blur(0px)"
-document.getElementById("ctrl-button").style.opacity = "0"
 }
 setInterval(function() {
 document.getElementById("title").innerHTML = moment().format('h:mm A')
@@ -103,7 +98,9 @@ function blurSetting(sliderID) {
 }
 
 window.onload = function() {
-  getSettings()
+  if(localStorage.auth) {
+    getSettings()
+  }
   fillInValues(userSettings())
   getWeather()
   blurSetting()
@@ -134,7 +131,7 @@ function loginbchange() {
 
 function userSettings() {
   try {
-    return userSettings()
+    return JSON.parse(localStorage.settings)
   } catch (err) {
     return {}
   }
