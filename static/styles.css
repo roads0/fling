@@ -64,8 +64,9 @@ h2 {
   margin-left:auto;margin-right:auto;
   white-space: nowrap;
   z-index: 6;
-  top: 12px;
-  right: 12px;
+  top: 0px;
+  right: 0px;
+  padding: 0px
 }
 #title {
   font-weight: 100;
@@ -87,13 +88,14 @@ h2 {
 input[type=text]#search {
   width: 100%;
   padding: 6px 10px;
-  margin: 2px;
+  margin: 0px;
   border-radius: 6px;
   background-color: rgba(192, 192, 192, 0.5);
   border: none;
   font-size: 100%;
   color: #FFF;
   margin-right: 0;
+  border-radius: 0px 0px 0px 6px;
 }
 .icon {
   position: relative;
@@ -120,12 +122,12 @@ input[type=text]#search {
   }
 .todo {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 0px;
+  left: 0px;
   background-color: rgba(192, 192, 192, 0.5);
   z-index: 5;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 8px;
+  border-radius: 0px 0px 6px 0px;
   display: flex;
   flex-direction: column;
 }
