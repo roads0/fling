@@ -28,7 +28,7 @@ function todo(e) {
     .end((err, res) => {
       document.getElementById('list').innerHTML = ""
       Object.keys(res.body).forEach(item => {
-        var nextup = `<div class="makeeverythinggoodagain"><input type="checkbox" name="${item}"><label for="${item}">${res.body[item]}</label></div>`
+        var nextup = `<div class="makeeverythinggoodagain"><input type="checkbox" name="${item}" onclick="removeTodo('${item}')"><label for="${item}">${res.body[item]}</label></div>`
         document.getElementById('list').innerHTML += nextup
       })
     })

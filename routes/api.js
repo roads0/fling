@@ -116,11 +116,11 @@ api.delete('/todo/:id', (req, res) => {
   if(req.get('Authorization')) {
     r.table('todos').get(req.get('Authorization')).then(rslt => {
       var list = rslt
-      list.todos[req.params.id] = undefined
-      r.table('todos').get(req.get('Authorization')).update(list).then((result) => {
-        res.status(204).send()
+      delete list.todos[req.params.id]
+      r.table('todos').insert(list, {conflict: "replace"}).then((result) => {
+        res.status(200).json(result)
       }).catch((err) => {
-        res.json({status: 'Error', error: err})
+        res.status(500).json({status: 'Error', error: err})
       })
     })
   } else {
