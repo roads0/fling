@@ -83,7 +83,7 @@ function rotationNation() {
   })
 }
 
-function blurSetting(sliderID) {
+function blurSetting() {
   var y;
   try {
     var y = userSettings().blur;
@@ -104,6 +104,7 @@ window.onload = function() {
   fillInValues(userSettings())
   getWeather()
   blurSetting()
+  loginbchange()
 }
 
 function getSettings() {
@@ -126,7 +127,11 @@ function fillInValues(settings) {
 }
 
 function loginbchange() {
-  console.log('sucess')
+  if (localStorage.auth) {
+    document.getElementById('userstats').style='visibility: visible;'
+  } else {
+    document.getElementById('loginbutton').style='visibility: visible;'
+  }
 }
 
 function userSettings() {

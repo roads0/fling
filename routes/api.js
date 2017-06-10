@@ -27,14 +27,20 @@ api.get('/background', (req, res) => {
       var customstring = result.reddit;
       customstring = customstring.replace(/\s/g, '');
       var customreddits = customstring.split(',');
+      if (customreddits[0] < customreddits.length) {
+        reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
+        res.json(data[Math.floor(Math.random() * data.length)])
+        })
+      } else {
       reddit.getSubreddit(customreddits[Math.floor(Math.random()*customreddits.length)]).getTop({time: 'week'}).then(data => {
       res.json(data[Math.floor(Math.random() * data.length)])
     }).catch(e => {
-      console.log(e + "invalid reddit")
+      console.log(e + "invalid reddit") // add a warning that says invalid reddit
       reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
       res.json(data[Math.floor(Math.random() * data.length)])
       })
     })
+  }
   })
 } else {
     reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {

@@ -40,14 +40,16 @@ block content
         input#backgroundInterval(type='number' placeholder='(seconds)' name='bgchange').linetext
       .option
         p.label Blur
-        input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="blurSetting('blurSlide')")
+        input#blurSlide(type='range', min='0', max='25', step='1', name='blur' onchange="blurSetting()")
         //input#blurVal(type='text' size='2')
       .option
         p.label Background Sources (reddit)
         input#reddits(type='text', placeholder='EarthPorn, SpacePorn, ExposurePorn' name='reddit').linetext
     a.settingsbtn(href='#' onclick='closesettings()')
       i.fa.fa-times.iconcog(aria-hidden='true')
-    a.loginbtn(href='./auth' onclick='loginbchange()')
+    a.userstats#userstats(style='visibility: hidden;')
+      //- make style
+    a.loginbtn#loginbutton(href='./auth' onclick='loginbchange()' style='visibility: hidden;')
       p.labellogin Login        
         
     script(src='/static/main.js')
