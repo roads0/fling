@@ -27,6 +27,13 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+app.use('*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+})
+
 app.use('/', require('./routes/index.js'))
 app.use('/api', require('./routes/api.js'))
 app.use('/auth', require('./routes/auth.js'))
