@@ -1,15 +1,18 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var sassMiddleware = require('node-sass-middleware');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const sassMiddleware = require('node-sass-middleware');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
+const passport = require('passport');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const config = require('./config.json')
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,17 +27,43 @@ app.use(cookieParser());
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
-  indentedSyntax: true, // true = .sass and false = .scss
+  indentedSyntax: false, // true = .sass and false = .scss
   sourceMap: true
 }));
+
+mongoose.connect(config.db.url);
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', () => {
+  console.log(`DB at ${config.db.url} Ready!`)
+})
+
+app.use(session({
+    secret: 'foo',
+    store: new MongoStore({ url: config.db.url })
+}));
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', require('./routes/index'));
+app.use('/api', require('./routes/api'));
+app.use('/users', require('./routes/users'));
+app.use('/auth', require('./routes/auth')(passport));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('>:^(');
   err.status = 404;
   next(err);
 });
@@ -50,4 +79,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+app.listen(process.env.PORT || 6789, () => {
+  console.log(`Listening on port ${process.env.PORT || 6789}`)
+})

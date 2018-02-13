@@ -1,5 +1,29 @@
 extends layout
 
+block head
+  script(src="/script/moment.js")
+  script(src="/script/main.js")
+  script(src="https://use.fontawesome.com/releases/v5.0.6/js/all.js")
+  
+
 block content
-  h1= title
-  p Welcome to #{title}
+  .loadFS
+    .loader Loading...
+  .bg
+  .overlay
+    input(placeholder="search").search
+    .todo
+      .list
+        .title List:
+        .items
+        input(placeholder="Buy cheese").addItem
+      .handle
+        i.fas.fa-angle-double-down
+    .clock
+      .weekday
+      .time
+      .date
+    .weather
+      | Loading...
+      
+    
