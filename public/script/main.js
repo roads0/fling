@@ -32,7 +32,10 @@ function setBackground() {
 
     }
     reader.readAsDataURL(bg)
-  });
+  }).catch(err => {
+    showErr(err.message)
+    document.querySelector('.bg').style['background-image'] = 'url("/images/nopic.png")'
+  })
 }
 
 function getUser() {
