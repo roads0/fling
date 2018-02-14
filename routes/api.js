@@ -169,17 +169,12 @@ function get_image(subreddits, cb, repeated) {
   random_subreddit(subreddits, (err, subreddit) => {
     if(err) {
       cb(err)
-      console.log(err)
     } else {
       reddit.getSubreddit(subreddit).getTop({time: 'week'}).then((data) => {
-        console.log('a')
         superagent.get(data[Math.floor(Math.random() * data.length)].url).end((err, resp) => {
-          console.log('b')
           if (err) {
-            console.log(err)
             cb(err)
           } else {
-            console.log(resp.headers['content-type'])
             if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
               cb(null, {body: resp.body, type: resp.headers['content-type']})
             } else {
