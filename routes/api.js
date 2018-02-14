@@ -104,27 +104,39 @@ router.delete('/todo/:id', (req, res, next) => {
 router.post('/me/settings', (req, res, next) => {
   let count = 0;
   let validReddits = [], invalidReddits = []
-  req.body.subreddits.forEach(reddit => {
-    check_subreddit(reddit, (err, valid) => {
-      if(err||!valid) {
-        invalidReddits.push(reddit)
+  if(req.body.subreddits.length > 0) {
+    req.body.subreddits.forEach(reddit => {
+      check_subreddit(reddit, (err, valid) => {
+        if(err||!valid) {
+          invalidReddits.push(reddit)
+        } else {
+          validReddits.push(reddit)
+        }
+        count++
+        if(count == req.body.subreddits.length) {
+          req.body.subreddits = validReddits
+          req.user.setting_manager(req.body, (err, setting) => {
+            if (err) {
+              next(err)
+            } else {
+              setting.invalidReddits = invalidReddits
+              res.json(setting)
+            }
+          })
+        }
+      })
+    })
+  } else {
+    req.body.subreddits = validReddits
+    req.user.setting_manager(req.body, (err, setting) => {
+      if (err) {
+        next(err)
       } else {
-        validReddits.push(reddit)
-      }
-      count++
-      if(count == req.body.subreddits.length) {
-        req.body.subreddits = validReddits
-        req.user.setting_manager(req.body, (err, setting) => {
-          if (err) {
-            next(err)
-          } else {
-            setting.invalidReddits = invalidReddits
-            res.json(setting)
-          }
-        })
+        setting.invalidReddits = invalidReddits
+        res.json(setting)
       }
     })
-  })
+  }
 })
 
 module.exports = router;
@@ -157,13 +169,18 @@ function get_image(subreddits, cb, repeated) {
   random_subreddit(subreddits, (err, subreddit) => {
     if(err) {
       cb(err)
+      console.log(err)
     } else {
       reddit.getSubreddit(subreddit).getTop({time: 'week'}).then((data) => {
+        console.log('a')
         superagent.get(data[Math.floor(Math.random() * data.length)].url).end((err, resp) => {
+          console.log('b')
           if (err) {
+            console.log(err)
             cb(err)
           } else {
-            if (['image/jpeg', 'image/png'].includes(resp.headers['Content-Type'])) {
+            console.log(resp.headers['content-type'])
+            if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
               cb(null, {body: resp.body, type: resp.headers['content-type']})
             } else {
               get_image(subreddits, cb, repeated++)

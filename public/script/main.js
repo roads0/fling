@@ -216,7 +216,7 @@ function updateUserSettings(cb) {
     method: 'POST',
     body: JSON.stringify({
       degreeType: document.querySelector('#tempF').checked ? 'F' : 'C',
-      subreddits: document.querySelector('input.reddits').value.replace(/ /gi,'').split(',').map(r => {return encodeURI(r)})
+      subreddits: document.querySelector('input.reddits').value.replace(/ /gi,'').split(',').filter(r => r?true:false).map(r => encodeURI(r))
     }),
     headers: new Headers({
       'Content-Type': 'application/json'
