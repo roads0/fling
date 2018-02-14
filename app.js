@@ -10,6 +10,8 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const passport = require('passport');
 
+const User = require('./models/User')
+
 const config = require('./config.json')
 
 const app = express();
@@ -40,15 +42,27 @@ db.once('open', () => {
 })
 
 app.use(session({
-    secret: 'foo',
-    store: new MongoStore({ url: config.db.url })
+  secret: 'foo',
+  store: new MongoStore({ url: config.db.url })
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  User.findById(user._id, (err, userDb) => {
+    if (err) {
+      done (err);
+    } else {
+      done(null, userDb);
+    }
+  })
 });
 passport.deserializeUser((obj, done) => {
-  done(null, obj);
+  User.findById(obj._id, (err, userDb) => {
+    if (err) {
+      done (err);
+    } else {
+      done(null, userDb);
+    }
+  })
 });
 
 app.use(passport.initialize())

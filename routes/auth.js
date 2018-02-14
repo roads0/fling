@@ -20,7 +20,7 @@ function auth(passport) {
         User.create({name: profile.displayName, googleId: profile.id, token: refreshToken}).then(newUser => {
           // user = newUser.toObject()
           // user.gProfile = profile //Attach google login data
-          cb(null, user)
+          cb(null, newUser)
         }).catch(err => {
           console.error(err)
         })

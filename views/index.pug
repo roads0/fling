@@ -14,16 +14,24 @@ block content
     input(placeholder="search").search
     .todo
       .list
-        .title List:
         .items
-        input(placeholder="Buy cheese").addItem
-      .handle
-        i.fas.fa-angle-double-down
+        input(placeholder="new todo").add-item
+      .buttons
+        .setting-btn
+          i.fas.fa-cog
+        .handle
+          i.fas.fa-angle-double-down
     .clock
       .weekday
       .time
       .date
     .weather
       | Loading...
+  .settings
+    .close-btn
+      i.fas.fa-times
+  .err 
+    h1 An error happened.
+    code
       
     

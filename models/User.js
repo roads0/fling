@@ -18,20 +18,24 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.add_todo = function(todo_data, cb) {
-  TodoModel.create({todo: TodoModel.create({title: todo_data})}, (err, todo) => {
-    this.todo.push(todo, (err) => {
-      if(err) {
-        cb(err)
-      } else {
-        this.save((err) => {
-          if(err) {
-            cb(err)
-          } else {
-            cb(null, todo)
-          }
-        })
-      }
+  TodoModel.create({title: todo_data}).then(todo => {
+    this.todo.push(todo)
+    this.save().then(() => {
+      cb(null, todo)
+    }).catch(err => {
+      cb(err)
     })
+  }).catch(err => {
+    cb(err)
+  })
+}
+
+userSchema.methods.edit_todo = function(id, todo, cb) {
+  this.todo.id(id).checked = todo.checked
+  this.save().then(() => {
+    cb(null, this.todo.id(id))
+  }).catch(err => {
+    cb(err)
   })
 }
 
@@ -46,6 +50,20 @@ userSchema.methods.remove_todo = function(todoid, cb) { // http://mongoosejs.com
         })
       }
     })
+  })
+}
+
+userSchema.methods.setting_manager = function(setting, cb) {
+  this.settings.subreddits = Array.isArray(setting.subreddits) ? setting.subreddits.map(r => {return encodeURI(r)}) : []
+  this.settings.degreeType = setting.degreeType == 'C' ? 'C' : 'F'
+  this.save((err) => {
+    if(err) {
+      cb(err)
+    } else {
+      this.save((err) => {
+        cb(null, this.toObject())
+      })
+    }
   })
 }
 
