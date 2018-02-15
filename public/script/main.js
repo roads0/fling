@@ -172,9 +172,11 @@ function renderItem(todo) {
   text.classList.add('text')
   text.appendChild(document.createTextNode(todo.title))
   text.addEventListener('dblclick,' function() {
-    var changed_text =
-    item.replaceChild(text) // i think this is kinda how to do it
-    editItem(todo._id, ) //send it the edit text see editItem func
+    text.editable = true
+    text.addEventListener('blur', function () {
+      text.editable = false
+      editItem(todo._id, {title: text.innerText}); // should work? idk. gtg. ok i will test
+    })
   })
   item.appendChild(text)
   var delIcn = document.createElement('i')
