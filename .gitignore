@@ -64,3 +64,4 @@ rethinkdb_data
 
 # DevServer
 .ftpconfig
+bin/www

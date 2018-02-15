@@ -171,6 +171,11 @@ function renderItem(todo) {
   var text = document.createElement('div')
   text.classList.add('text')
   text.appendChild(document.createTextNode(todo.title))
+  text.addEventListener('dblclick,' function() {
+    var changed_text =
+    item.replaceChild(text) // i think this is kinda how to do it
+    editItem(todo._id, ) //send it the edit text see editItem func
+  })
   item.appendChild(text)
   var delIcn = document.createElement('i')
   delIcn.classList.add('far')
@@ -191,6 +196,19 @@ function checkItem(id, checked, cb) {
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({checked: checked}),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  }).then(r => {return r.json()}).then(res => {
+    cb()
+  })
+}
+
+function editItem(id, edit, cb) {
+  fetch(`/api/todo/edit/${id}`, {
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({edited_todo: edit}),
     headers: new Headers({
       'Content-Type': 'application/json'
     })

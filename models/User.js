@@ -30,13 +30,22 @@ userSchema.methods.add_todo = function(todo_data, cb) {
   })
 }
 
-userSchema.methods.edit_todo = function(id, todo, cb) {
-  this.todo.id(id).checked = todo.checked
-  this.save().then(() => {
-    cb(null, this.todo.id(id))
-  }).catch(err => {
-    cb(err)
-  })
+userSchema.methods.edit_todo = function(id, change, cb) {
+  if (change.edited_todo) {
+    this.todo.id(id).title = change.edited_todo
+    this.save().then(() => {
+      cb(null, this.todo.id(id))
+    }).catch(err => {
+      cb(err)
+    })
+  } else if (change.checked) {
+    this.todo.id(id).checked = change.checked
+    this.save().then(() => {
+      cb(null, this.todo.id(id))
+    }).catch(err => {
+      cb(err)
+    })
+  }
 }
 
 userSchema.methods.remove_todo = function(todoid, cb) { // http://mongoosejs.com/docs/subdocs.html

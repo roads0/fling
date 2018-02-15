@@ -81,13 +81,23 @@ router.post('/todo/edit/:id', (req, res, next) => {
   if (!req.body) {
     res.status(400).json({err: 'missing param!'})
   } else {
-    req.user.edit_todo(req.params.id, {checked: req.body.checked}, (err, todo) => {
-      if (err) {
-        next(err)
-      } else {
-        res.json(todo)
+      if (req.body.edited_todo) {
+        req.user.edit_todo(req.params.id, {edited_todo: req.body.edited_todo}, (err, todo) => {
+          if (err) {
+            next(err)
+          } else {
+            res.json(todo)
+          }
+        })
+      } else if (req.body.checked) {
+        req.user.edit_todo(req.params.id, {checked: req.body.checked}, (err, todo) => {
+          if (err) {
+            next(err)
+          } else {
+            res.json(todo)
+          }
+        })
       }
-    })
   }
 })
 
