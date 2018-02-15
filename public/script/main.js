@@ -78,6 +78,9 @@ function getUser() {
         })
       }, 500)
     }
+
+    document.querySelector('.settings').innerHTML +=  `<div class="info"><h1>More Info</h1><br><a href="https://paypal.me/SplitPixl" class="btn">Support Us</a></div>`
+
     setTimeout(function () {
       if (localStorage.todoActive == 'true') {
         document.querySelector('.todo').style.top = '0px'
@@ -171,12 +174,19 @@ function renderItem(todo) {
   var text = document.createElement('div')
   text.classList.add('text')
   text.appendChild(document.createTextNode(todo.title))
+  function updateText (e) {
+    if(!e.keyCode || e.keyCode == 13) {
+      text.contentEditable = false
+      text.removeEventListener('blur', updateText)
+      text.removeEventListener('keydown', updateText)
+      editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
+    }
+  }
   text.addEventListener('dblclick', function() {
     text.contentEditable = true
-    text.addEventListener('blur', function () {
-      text.contentEditable = false
-      editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
-    })
+    text.focus()
+    text.addEventListener('blur', updateText)
+    text.addEventListener('keydown', updateText)
   })
   item.appendChild(text)
   var delIcn = document.createElement('i')
@@ -202,7 +212,9 @@ function checkItem(id, checked, cb) {
       'Content-Type': 'application/json'
     })
   }).then(r => {return r.json()}).then(res => {
-    cb()
+    if(cb) {
+      cb()
+    }
   })
 }
 
@@ -215,7 +227,9 @@ function editItem(id, edit, cb) {
       'Content-Type': 'application/json'
     })
   }).then(r => {return r.json()}).then(res => {
-    cb()
+    if(cb) {
+      cb()
+    }
   })
 }
 
@@ -242,7 +256,9 @@ function updateUserSettings(cb) {
       'Content-Type': 'application/json'
     })
   }).then(r => {return r.json()}).then(res => {
-    cb()
+    if(cb) {
+      cb()
+    }
     document.querySelector('input.reddits').value = res.settings.subreddits.join(', ')
     console.log(res.invalidReddits)
     if(res.invalidReddits.length > 0) {
