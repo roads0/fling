@@ -31,14 +31,15 @@ userSchema.methods.add_todo = function(todo_data, cb) {
 }
 
 userSchema.methods.edit_todo = function(id, change, cb) {
-  if (change.edited_todo) {
+  if (change.edited_todo != undefined) {
     this.todo.id(id).title = change.edited_todo
     this.save().then(() => {
       cb(null, this.todo.id(id))
     }).catch(err => {
       cb(err)
     })
-  } else if (change.checked) {
+  }
+  if (change.checked != undefined) {
     this.todo.id(id).checked = change.checked
     this.save().then(() => {
       cb(null, this.todo.id(id))

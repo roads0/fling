@@ -171,11 +171,11 @@ function renderItem(todo) {
   var text = document.createElement('div')
   text.classList.add('text')
   text.appendChild(document.createTextNode(todo.title))
-  text.addEventListener('dblclick,' function() {
-    text.editable = true
+  text.addEventListener('dblclick', function() {
+    text.contentEditable = true
     text.addEventListener('blur', function () {
-      text.editable = false
-      editItem(todo._id, {title: text.innerText}); // should work? idk. gtg. ok i will test
+      text.contentEditable = false
+      editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
     })
   })
   item.appendChild(text)
