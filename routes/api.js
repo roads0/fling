@@ -1,143 +1,198 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const config = require('../config');
-const weather = require('weather-js')
+const weather = require('weather-js');
 const snoowrap = require('snoowrap');
-const api = express.Router();
+const superagent = require('superagent');
+const Todo = require('../models/Todo');
+const config = require('../config');
+const router = express.Router();
+
 const reddit = new snoowrap({
   userAgent: 'An in-browser dashboard service',
-  clientId: config.snoowrap.clientIdS,
-  clientSecret: config.snoowrap.client_secretS,
-  refreshToken: config.snoowrap.refresh_token
+  clientId: config.snoowrap.clientId,
+  clientSecret: config.snoowrap.clientSecret,
+  refreshToken: config.snoowrap.refreshToken
 });
-const reddits = ['EarthPorn', 'SpacePorn', 'ExposurePorn']
 
-api.use(bodyParser.json());
+const defaultReddits = ['EarthPorn', 'SpacePorn', 'ExposurePorn'] //add dankmemes for style points
 
-api.get('/weather/:place', (req, res) => {
-  weather.find({search: req.params.place, degreeType: 'F'}, function (err, result) {
-    if(err) console.log(err)
-    res.json(result[0])
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.json(['welcome','to','memeland'])
+});
+
+router.get('/me', checkAuth, function(req, res, next) {
+  let cleanUser = Object.assign({}, req.user.toObject())
+  delete cleanUser.token
+  res.json(cleanUser)
+});
+
+router.get('/weather/:place', (req, res, next) => {
+  let degreeType = req.user ? req.user.settings ? req.user.settings.degreeType : 'F' : 'F'
+  weather.find({search: req.params.place, degreeType: degreeType || 'F'}, function (err, result) {
+    if(err) {
+      next(err)
+    } else {
+      res.json(result[0])
+    }
   })
 })
 
-api.get('/background', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('settings').get(req.get('Authorization')).then(result => {
-      var customstring = result.reddit;
-      customstring = customstring.replace(/\s/g, '');
-      var customreddits = customstring.split(',');
-      if (customreddits[0] < customreddits.length) {
-        reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
-        res.json(data[Math.floor(Math.random() * data.length)])
-        })
+router.get('/background', (req, res, next) => {
+  if (req.user && req.user.settings.subreddits != undefined && req.user.settings.subreddits.length != 0 && !(req.user.settings.subreddits.length == 1 && req.user.settings.subreddits[0] == '')) {
+    get_image(req.user.settings.subreddits, (err, img) => {
+      if (err) {
+        console.error(err)
+        res.set('Content-Type', 'image/png')
+        res.send(require('fs').readFileSync('./public/images/nopic.png'))
       } else {
-      reddit.getSubreddit(customreddits[Math.floor(Math.random()*customreddits.length)]).getTop({time: 'week'}).then(data => {
-      res.json(data[Math.floor(Math.random() * data.length)])
-    }).catch(e => {
-      console.log(e + "invalid reddit") // add a warning that says invalid reddit
-      reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
-      res.json(data[Math.floor(Math.random() * data.length)])
-      })
-    })
-  }
-  })
-} else {
-    reddit.getSubreddit(reddits[Math.floor(Math.random()*reddits.length)]).getTop({time: 'week'}).then(data => {
-    res.json(data[Math.floor(Math.random() * data.length)])
-    })
-  }
-})
-
-api.post('/settings', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('settings').get(req.get('Authorization')).update(req.body).then((result) => {
-      res.json({status: 'OK!'})
-    }).catch((err) => {
-      res.json({status: 'Error', error: err})
-    })
-  } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
-  }
-})
-
-api.get('/settings', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('settings').get(req.get('Authorization')).then(result => {
-      res.json(result)
-    }).catch((err) => {
-      res.json({status: 'Error', error: err})
-    })
-  } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
-  }
-})
-
-api.post('/todo', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('todos').get(req.get('Authorization')).then(rslt => {
-      let id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16); // TODO: do a thing make this better
-      });
-      var list = rslt
-      if (rslt != null) {
-        list.id = req.get('Authorization')
-        list.todos[id] = req.body.value
-      } else {
-        list = {id: req.get('Authorization'), todos: {}}
-        list.todos[id] = req.body.value
+        res.set('Content-Type', img.type)
+        res.send(img.body)
       }
-      r.table('todos').insert(list, {conflict: "update"}).then((result) => {
-        list.id = undefined
-        res.json(list.todos)
-      }).catch((err) => {
-        res.json({status: 'Error', error: err})
+    })
+  } else {
+    get_image(defaultReddits, (err, img) => {
+      if (err) {
+        console.error(err)
+        res.set('Content-Type', 'image/png')
+        res.send(require('fs').readFileSync('./public/images/nopic.png'))
+      } else {
+        res.set('Content-Type', img.type)
+        res.send(img.body)
+      }
+    })
+  }
+})
+
+router.post('/todo/create', (req, res, next) => {
+  if (!req.body || !req.body.title) {
+    res.status(400).json({err: 'missing title param!'})
+  } else {
+    req.user.add_todo(req.body.title, (err, todo) => {
+      if (err) {
+        next(err)
+      } else {
+        res.json(todo)
+      }
+    })
+  }
+})
+
+router.post('/todo/edit/:id', (req, res, next) => {
+  if (!req.body) {
+    res.status(400).json({err: 'missing param!'})
+  } else {
+      req.user.edit_todo(req.params.id, {edited_todo: req.body.edited_todo, checked: req.body.checked}, (err, todo) => {
+        if (err) {
+          next(err)
+        } else {
+          res.json(todo)
+        }
+      })
+  }
+})
+
+router.delete('/todo/:id', (req, res, next) => {
+  req.user.remove_todo(req.params.id, (err, todo) => {
+    if (err) {
+      next(err)
+    } else {
+      res.json(todo)
+    }
+  })
+})
+
+router.post('/me/settings', (req, res, next) => {
+  let count = 0;
+  let validReddits = [], invalidReddits = []
+  if(req.body.subreddits.length > 0) {
+    req.body.subreddits.forEach(reddit => {
+      check_subreddit(reddit, (err, valid) => {
+        if(err||!valid) {
+          invalidReddits.push(reddit)
+        } else {
+          validReddits.push(reddit)
+        }
+        count++
+        if(count == req.body.subreddits.length) {
+          req.body.subreddits = validReddits
+          req.user.setting_manager(req.body, (err, setting) => {
+            if (err) {
+              next(err)
+            } else {
+              setting.invalidReddits = invalidReddits
+              res.json(setting)
+            }
+          })
+        }
       })
     })
   } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
-  }
-})
-
-api.get('/todo', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('todos').get(req.get('Authorization')).then(result => {
-      res.json(result.todos)
-    }).catch((err) => {
-      res.json({status: 'Error', error: err})
+    req.body.subreddits = validReddits
+    req.user.setting_manager(req.body, (err, setting) => {
+      if (err) {
+        next(err)
+      } else {
+        setting.invalidReddits = invalidReddits
+        res.json(setting)
+      }
     })
-  } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
   }
 })
 
-api.delete('/todo/:id', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('todos').get(req.get('Authorization')).then(rslt => {
-      var list = rslt
-      delete list.todos[req.params.id]
-      r.table('todos').insert(list, {conflict: "replace"}).then((result) => {
-        res.status(200).json(result)
-      }).catch((err) => {
-        res.status(500).json({status: 'Error', error: err})
+module.exports = router;
+
+function random_subreddit(subreddit_list, cb){
+  let mySubreddit = subreddit_list[Math.floor(Math.random() * subreddit_list.length)]
+  check_subreddit(mySubreddit, (err, valid) => {
+    if(err) {
+      cb(err)
+    } else if(valid) {
+      cb(null, mySubreddit)
+    } else {
+      cb(new Error('subreddit not valid'))
+    }
+  })
+}
+
+function check_subreddit(subreddit, cb){
+  superagent.get(`https://reddit.com/r/${subreddit}.json`).redirects(1).end((err, resp) => {
+    cb(err, resp.statusCode == 200)
+  })
+}
+
+function get_image(subreddits, cb, repeated) {
+  repeated = repeated || 1
+  if (repeated > 4) {
+    cb(null, {body: require('fs').readFileSync('./public/images/nopic.png'), type: 'image/png'})
+  }
+
+  random_subreddit(subreddits, (err, subreddit) => {
+    if(err) {
+      cb(err)
+    } else {
+      reddit.getSubreddit(subreddit).getTop({time: 'week'}).then((data) => {
+        superagent.get(data[Math.floor(Math.random() * data.length)].url).end((err, resp) => {
+          if (err) {
+            cb(err)
+          } else {
+            if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
+              cb(null, {body: resp.body, type: resp.headers['content-type']})
+            } else {
+              get_image(subreddits, cb, repeated++)
+            }
+          }
+        })
+      }).catch(err => {
+        cb(err)
       })
-    })
-  } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
-  }
-})
+    }
+  })
+}
 
-api.get('/user', (req, res) => {
-  if(req.get('Authorization')) {
-    r.table('users').get(req.get('Authorization')).then(result => {
-      res.json(result)
-    }).catch((err) => {
-      res.json({status: 'Error', error: err})
-    })
+function checkAuth(req, res, next) {
+  if(req.user) {
+    next()
   } else {
-    res.status(401).json({status: 'Error', error: 'Unauthorized'})
+    res.status(401).json('log in you dumbo')
   }
-})
-
-module.exports = api
+}
