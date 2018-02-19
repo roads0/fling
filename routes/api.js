@@ -178,7 +178,7 @@ function get_image(subreddits, cb, repeated) {
             if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
               cb(null, {body: resp.body, type: resp.headers['content-type']})
             } else {
-              get_image(subreddits, cb, repeated++)
+              get_image(subreddits, cb, ++repeated)
             }
           }
         })
