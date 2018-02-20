@@ -106,6 +106,11 @@ function getWeather(location) {
 }
 
 function setEventListeners() {
+  document.addEventListener('keydown', function (e) {
+    if(e.target.nodeName == 'BODY') {
+      document.querySelector('.search').focus()
+    }
+  });
   document.querySelector('.handle').addEventListener('click', function () {
     var active = document.querySelector('.todo.active') ? true : false
     document.querySelector('.todo').style.top = (active ? `${-document.querySelector('.todo .list').clientHeight}px` : 0)
