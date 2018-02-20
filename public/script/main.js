@@ -28,8 +28,9 @@ function setBackground() {
     reader.onloadend = () => {
       document.querySelector('.bg').style['background-image'] = `url("${reader.result}")`
       // Hide the loadbox
-      document.querySelector('.loadFS').classList.add('hidden')
-
+      setTimeout(() => {
+        document.querySelector('.loadFS').classList.add('hidden')
+      }, 500)
     }
     reader.readAsDataURL(bg)
   }).catch(err => {
