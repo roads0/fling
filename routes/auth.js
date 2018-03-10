@@ -12,14 +12,10 @@ function auth(passport) {
     callbackURL: config.oauth.callbackURL
   }, (accessToken, refreshToken, profile, cb) => {
     User.findOne({googleId: profile.id}).then(user => { // will return a User or null
-      if(user) { //check that it's not null
-        // user = user.toObject()
-        // user.gProfile = profile //Attach google login data
+      if(user) {
         cb(null, user)
       } else {
-        User.create({name: profile.displayName, googleId: profile.id, token: refreshToken}).then(newUser => {
-          // user = newUser.toObject()
-          // user.gProfile = profile //Attach google login data
+        User.create({name: profile.displayName, googleId: profile.id, token: refreshToken, api_token: require('crypto').randomBytes(92).toString('base64')}).then(newUser => {
           cb(null, newUser)
         }).catch(err => {
           console.error(err)
