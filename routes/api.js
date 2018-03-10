@@ -23,6 +23,32 @@ router.get('/', function(req, res, next) {
 router.get('/me', checkAuth, function(req, res, next) {
   let cleanUser = Object.assign({}, req.user.toObject())
   delete cleanUser.token
+  delete cleanUser.api_token
+  res.json(cleanUser)
+});
+
+router.get('/me/todos', checkAuth, function(req, res, next) {
+  res.json(req.user.toObject().todo)
+});
+
+router.get('/me/token', checkAuth, function(req, res, next) {
+  res.json(req.user.api_token)
+});
+
+router.post('/me/token', checkAuth, function(req, res, next) {
+  req.user.token_reset((err, api_token) => {
+    if (err) {
+      next(err)
+    } else {
+      res.json(api_token)
+    }
+  })
+});
+
+router.get('/me', checkAuth, function(req, res, next) {
+  let cleanUser = Object.assign({}, req.user.toObject())
+  delete cleanUser.token
+  delete cleanUser.api_token
   res.json(cleanUser)
 });
 

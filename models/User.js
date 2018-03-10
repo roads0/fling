@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: String,
   avatar: String,
-  last_logged_in: { type: Date, default: Date.now },
   token: String,
   googleId: String,
+  api_token: { type: String, required: true },
   background: String,
   bgCss: String,
   settings: {
@@ -72,6 +72,19 @@ userSchema.methods.setting_manager = function(setting, cb) {
     } else {
       this.save((err) => {
         cb(null, this.toObject())
+      })
+    }
+  })
+}
+
+userSchema.methods.token_reset = function(cb) {
+  this.api_token = require('crypto').randomBytes(92).toString('base64')
+  this.save((err) => {
+    if(err) {
+      cb(err)
+    } else {
+      this.save((err) => {
+        cb(null, this.api_token)
       })
     }
   })

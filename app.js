@@ -68,6 +68,24 @@ passport.deserializeUser((obj, done) => {
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
+
+app.use((req, res, next) => {
+  let token = req.get('Authorization')
+  if (token && !req.user) {
+    User.findOne({api_token: token}, (err, usr) => {
+      req.user = usr
+      next();
+    })
+  } else {
+    next()
+  }
+})
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
