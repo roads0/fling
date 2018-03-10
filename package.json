@@ -7,12 +7,17 @@
   },
   "dependencies": {
     "body-parser": "~1.18.2",
+    "connect-mongo": "^2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "mongoose": "^5.0.9",
     "morgan": "~1.9.0",
     "node-sass-middleware": "0.9.8",
+    "passport-google-oauth20": "^1.0.0",
     "pug": "2.0.0-beta11",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "snoowrap": "^1.15.2",
+    "weather-js": "^2.0.0"
   }
 }
