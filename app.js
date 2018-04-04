@@ -44,8 +44,8 @@ db.once('open', () => {
 app.use(session({
   secret: config.sessionSecret,
   store: new MongoStore({ url: config.db.url }),
-  resave: false,
-  saveUninitialized: true,
+  resave: true,
+  saveUninitialized: false,
   cookie: { expires: false }
 }));
 
