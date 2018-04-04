@@ -64,29 +64,21 @@ router.get('/weather/:place', (req, res, next) => {
 })
 
 router.get('/background', (req, res, next) => {
+  let userreddits = Object.assign([], defaultReddits)
   if (req.user && req.user.settings.subreddits != undefined && req.user.settings.subreddits.length != 0 && !(req.user.settings.subreddits.length == 1 && req.user.settings.subreddits[0] == '')) {
-    get_image(req.user.settings.subreddits, (err, img) => {
-      if (err) {
-        console.error(err)
-        res.set('Content-Type', 'image/png')
-        res.send(require('fs').readFileSync('./public/images/nopic.png'))
-      } else {
-        res.set('Content-Type', img.type)
-        res.send(img.body)
-      }
-    })
-  } else {
-    get_image(defaultReddits, (err, img) => {
-      if (err) {
-        console.error(err)
-        res.set('Content-Type', 'image/png')
-        res.send(require('fs').readFileSync('./public/images/nopic.png'))
-      } else {
-        res.set('Content-Type', img.type)
-        res.send(img.body)
-      }
-    })
+    userreddits = Object.assign([], req.user.settings.subreddits)
   }
+  get_image(userreddits, (err, img) => {
+    if (err) {
+      console.error(err)
+      res.set('Content-Type', 'image/png')
+      res.send(require('fs').readFileSync('./public/images/nopic.png'))
+    } else {
+      res.set('Content-Type', img.type)
+      res.set('Content-Length', img.size)
+      res.send(img.body)
+    }
+  })
 })
 
 router.post('/todo/create', (req, res, next) => {
@@ -202,7 +194,7 @@ function get_image(subreddits, cb, repeated) {
             cb(err)
           } else {
             if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
-              cb(null, {body: resp.body, type: resp.headers['content-type']})
+              cb(null, {body: resp.body, type: resp.headers['content-type'], size: resp.headers['content-length']})
             } else {
               get_image(subreddits, cb, repeated++)
             }
