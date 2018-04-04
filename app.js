@@ -42,8 +42,11 @@ db.once('open', () => {
 })
 
 app.use(session({
-  secret: 'foo',
-  store: new MongoStore({ url: config.db.url })
+  secret: config.sessionSecret,
+  store: new MongoStore({ url: config.db.url }),
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true, maxAge: 6.307e+10 }
 }));
 
 passport.serializeUser((user, done) => {
