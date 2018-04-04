@@ -46,7 +46,7 @@ app.use(session({
   store: new MongoStore({ url: config.db.url }),
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true, maxAge: 6.307e+10 }
+  cookie: { expires: false }
 }));
 
 passport.serializeUser((user, done) => {
