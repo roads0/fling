@@ -71,8 +71,7 @@ router.get('/background', (req, res, next) => {
   get_image(userreddits, (err, img) => {
     if (err) {
       console.error(err)
-      res.set('Content-Type', 'image/png')
-      res.send(require('fs').readFileSync('./public/images/nopic.png'))
+      res.redirect('/images/nopic.png')
     } else {
       res.set('Content-Type', img.type)
       res.set('Content-Length', img.size)
@@ -196,7 +195,7 @@ function get_image(subreddits, cb, repeated) {
             if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
               cb(null, {body: resp.body, type: resp.headers['content-type'], size: resp.headers['content-length']})
             } else {
-              get_image(subreddits, cb, ++repeated)
+              get_image(subreddits, cb, repeated++)
             }
           }
         })
