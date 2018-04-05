@@ -73,9 +73,11 @@ router.get('/background', (req, res, next) => {
       console.error(err)
       res.redirect('/images/nopic.png')
     } else {
+      console.log(img.body.length, img.size)
+      res.set('Content-Length', img.body.length)
       res.set('Content-Type', img.type)
-      res.set('Content-Length', img.size)
-      res.send(img.body)
+      res.write(img.body)
+      res.end()
     }
   })
 })
