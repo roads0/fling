@@ -178,7 +178,7 @@ function renderItem(todo) {
   item.appendChild(chkbox)
   var text = document.createElement('div')
   text.classList.add('text')
-  text.innerHTML = marked(strip(todo.title))
+  text.innerHTML = marked(escape(todo.title))
   function updateText (e) {
     if(!e.keyCode || (e.keyCode == 13)) {
       todo.title = text.innerText
@@ -186,7 +186,7 @@ function renderItem(todo) {
       text.removeEventListener('keydown', updateText)
       editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
       text.contentEditable = false
-      text.innerHTML = marked(strip(text.innerText))
+      text.innerHTML = marked(escape(text.innerText))
     }
   }
   text.addEventListener('dblclick', function() {
@@ -350,7 +350,16 @@ function iconType(skycode) {
 
 // XXX: function rotation nation () _{{{{{{{{{{%212!@$!!#%%%%%!#%^^^^^^^^^^^^^^{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}} awe yeah baybe}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 
-function strip(html){
-   var doc = new DOMParser().parseFromString(html, 'text/html');
-   return doc.body.textContent || "";
+var tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+};
+
+function replaceTag(tag) {
+    return tagsToReplace[tag] || tag;
+}
+
+function escape(str) {
+    return str.replace(/[&<>]/g, replaceTag);
 }
