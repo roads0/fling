@@ -181,6 +181,7 @@ function renderItem(todo) {
   text.innerHTML = marked(strip(todo.title))
   function updateText (e) {
     if(!e.keyCode || (e.keyCode == 13)) {
+      todo.title = text.innerText
       text.removeEventListener('blur', updateText)
       text.removeEventListener('keydown', updateText)
       editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
