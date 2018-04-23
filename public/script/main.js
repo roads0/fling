@@ -16,9 +16,8 @@ function load() {
 }
 
 function updateClock() {
-  document.querySelector('.weekday').innerText = moment().format('dddd')
+  document.querySelector('.date').innerText = moment().format('dddd, D MMMM YYYY')
   document.querySelector('.time').innerHTML = moment().format('hh:MM[<div class="small">]A[</div>]')
-  document.querySelector('.date').innerText = moment().format('D MMMM YYYY')
 }
 
 // TODO: check if subreddit is valid
@@ -179,17 +178,19 @@ function renderItem(todo) {
   item.appendChild(chkbox)
   var text = document.createElement('div')
   text.classList.add('text')
-  text.appendChild(document.createTextNode(todo.title))
+  text.innerHTML = marked(strip(todo.title))
   function updateText (e) {
-    if(!e.keyCode || e.keyCode == 13) {
-      text.contentEditable = false
+    if(!e.keyCode || (e.keyCode == 13)) {
       text.removeEventListener('blur', updateText)
       text.removeEventListener('keydown', updateText)
       editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
+      text.contentEditable = false
+      text.innerHTML = marked(strip(text.innerText))
     }
   }
   text.addEventListener('dblclick', function() {
     text.contentEditable = true
+    text.innerText = todo.title
     text.focus()
     text.addEventListener('blur', updateText)
     text.addEventListener('keydown', updateText)
@@ -347,3 +348,8 @@ function iconType(skycode) {
 }
 
 // XXX: function rotation nation () _{{{{{{{{{{%212!@$!!#%%%%%!#%^^^^^^^^^^^^^^{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}} awe yeah baybe}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+
+function strip(html){
+   var doc = new DOMParser().parseFromString(html, 'text/html');
+   return doc.body.textContent || "";
+}

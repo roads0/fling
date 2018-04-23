@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700,700i');
 
 body {
   padding: 0px;
@@ -176,6 +176,14 @@ a {
 
         .text {
           width: 100%;
+
+          p {
+            margin: 0px;
+          }
+
+          h1, h2, h3, h4, h5, h6 {
+            margin: 0px;
+          }
         }
       }
 

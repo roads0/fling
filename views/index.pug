@@ -3,6 +3,7 @@ extends layout
 block head
   script(src="/script/moment.js")
   script(src="/script/main.js")
+  script(src="https://cdn.jsdelivr.net/npm/marked/marked.min.js")
   script(src="https://use.fontawesome.com/releases/v5.0.6/js/all.js")
   
 
@@ -22,9 +23,8 @@ block content
         .handle
           i.fas.fa-angle-double-down
     .clock
-      .weekday
-      .time
       .date
+      .time
     .weather
       | Loading...
   .settings
