@@ -32,6 +32,10 @@ function auth(passport) {
     res.redirect('/')
   })
 
+  router.get('/mobile', passport.authenticate('google', { scope: ['profile'], accessType: 'offline', prompt: 'consent', callbackURL: `${config.oauth.callbackURL}mobile` }), (req, res) => {
+    res.redirect(`https://${config.mobileDomain}/?${req.user.api_token}`)
+  })
+
   router.get('/logout', (req, res) => {
     req.logout()
     res.redirect('/')
