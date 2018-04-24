@@ -178,7 +178,7 @@ function renderItem(todo) {
   item.appendChild(chkbox)
   var text = document.createElement('div')
   text.classList.add('text')
-  text.innerHTML = marked(escape(todo.title))
+  text.innerHTML = marked(HTMLescape(todo.title))
   function updateText (e) {
     if(!e.keyCode || (e.keyCode == 13)) {
       todo.title = text.innerText
@@ -186,7 +186,7 @@ function renderItem(todo) {
       text.removeEventListener('keydown', updateText)
       editItem(todo._id, text.innerText) // should work? idk. gtg. ok i will test
       text.contentEditable = false
-      text.innerHTML = marked(escape(text.innerText))
+      text.innerHTML = marked(HTMLescape(text.innerText))
     }
   }
   text.addEventListener('dblclick', function() {
@@ -360,6 +360,6 @@ function replaceTag(tag) {
     return tagsToReplace[tag] || tag;
 }
 
-function escape(str) {
+function HTMLescape(str) {
     return str.replace(/[&<>]/g, replaceTag);
 }
