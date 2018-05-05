@@ -67,15 +67,17 @@ router.get('/background', (req, res, next) => {
   let userreddits = Object.assign([], defaultReddits)
   if (req.user && req.user.settings.subreddits != undefined && req.user.settings.subreddits.length != 0 && !(req.user.settings.subreddits.length == 1 && req.user.settings.subreddits[0] == '')) {
     userreddits = Object.assign([], req.user.settings.subreddits)
+  } else if (req.body.params && req.body.params.subreddits) {
+    userreddits = `${req.body.params.subreddits}`.split(',')
   }
   get_image(userreddits, (err, img) => {
     if (err) {
       console.error(err)
       res.redirect('/images/nopic.png')
     } else {
-      console.log(img.body.length, img.size)
       res.set('Content-Length', img.body.length)
       res.set('Content-Type', img.type)
+      res.set('X-More-Info', JSON.stringify(img.src))
       res.write(img.body)
       res.end()
     }
@@ -190,12 +192,13 @@ function get_image(subreddits, cb, repeated) {
       cb(err)
     } else {
       reddit.getSubreddit(subreddit).getTop({time: 'week'}).then((data) => {
-        superagent.get(data[Math.floor(Math.random() * data.length)].url).end((err, resp) => {
+        let rand = Math.floor(Math.random() * data.length)
+        superagent.get(data[rand].url).end((err, resp) => {
           if (err) {
             cb(err)
           } else {
-            if (['image/jpeg', 'image/png'].includes(resp.headers['content-type'])) {
-              cb(null, {body: resp.body, type: resp.headers['content-type'], size: resp.headers['content-length']})
+            if ((/image\/.+/i).test(resp.headers['content-type'])) {
+              cb(null, {body: resp.body, type: resp.headers['content-type'], size: resp.headers['content-length'], src: data[rand]})
             } else {
               get_image(subreddits, cb, repeated++)
             }
