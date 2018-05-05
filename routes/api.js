@@ -67,8 +67,8 @@ router.get('/background', (req, res, next) => {
   let userreddits = Object.assign([], defaultReddits)
   if (req.user && req.user.settings.subreddits != undefined && req.user.settings.subreddits.length != 0 && !(req.user.settings.subreddits.length == 1 && req.user.settings.subreddits[0] == '')) {
     userreddits = Object.assign([], req.user.settings.subreddits)
-  } else if (req.body.params && req.body.params.subreddits) {
-    userreddits = `${req.body.params.subreddits}`.split(',')
+  } else if (req.query && req.query.subreddits) {
+    userreddits = `${req.query.subreddits}`.split(',')
   }
   get_image(userreddits, (err, img) => {
     if (err) {
