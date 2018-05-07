@@ -77,7 +77,7 @@ router.get('/background', (req, res, next) => {
     } else {
       res.set('Content-Length', img.body.length)
       res.set('Content-Type', img.type)
-      res.set('X-More-Info', JSON.stringify(img.src))
+      res.set('X-More-Info', Buffer.from(JSON.stringify(img.src)).toString('base64'))
       res.write(img.body)
       res.end()
     }
