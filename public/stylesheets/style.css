@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700,700i");
 body {
   padding: 0px;
   margin: 0px;
@@ -43,6 +43,12 @@ a {
   width: 100%;
   height: 100%;
   display: flex;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   background: radial-gradient(at center, transparent 0, rgba(0, 0, 0, 0.4) 100%); }
   .overlay .search {
     position: absolute;
@@ -132,6 +138,10 @@ a {
         align-items: center; }
         .overlay .todo .list .item .text {
           width: 100%; }
+          .overlay .todo .list .item .text p {
+            margin: 0px; }
+          .overlay .todo .list .item .text h1, .overlay .todo .list .item .text h2, .overlay .todo .list .item .text h3, .overlay .todo .list .item .text h4, .overlay .todo .list .item .text h5, .overlay .todo .list .item .text h6 {
+            margin: 0px; }
       .overlay .todo .list .item .delete {
         opacity: 0; }
       .overlay .todo .list .item:hover .delete {
@@ -191,7 +201,13 @@ a {
   color: #fff;
   background: rgba(34, 34, 34, 0.9);
   opacity: 0;
-  transition: 0.5s; }
+  transition: 0.5s;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
   .settings .btn {
     text-decoration: none;
     padding: 6px;

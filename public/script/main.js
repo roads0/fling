@@ -23,7 +23,7 @@ function updateClock() {
 // TODO: check if subreddit is valid
 function setBackground() {
   fetch('/api/background', {credentials: 'include'}).then(r => {
-    console.log(JSON.parse(r.headers.get('X-More-Info')))
+    console.log(JSON.parse(decodeURI(r.headers.get('X-More-Info'))))
     return r.blob()
   }).then(bg => {
     const reader = new FileReader()
