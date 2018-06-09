@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700,700i');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 body {
   padding: 0px;
@@ -117,131 +118,12 @@ a {
     }
   }
 
-  .todo {
-    position: absolute;
-    top: -100%;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    transition: 0.5s;
-    color: #fff;
-
-    .add-item {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #fff;
-      width: 100%;
-      margin-top: 8px;
-      color: #fff;
-    }
-
-    .add-item:focus {
-      outline: none;
-    }
-
-    .list {
-      width: 25%;
-      min-width: 300px;
-      max-height: 50vh;
-      overflow-y: auto;
-      padding: 12px;
-      background: rgba(34,34,34, 0.7);
-
-      .login-prompt {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 18px 0px;
-
-        p {
-          margin: 0;
-          margin-bottom: 10px;
-        }
-
-        a {
-          text-decoration: none;
-          padding: 6px;
-          border: 1px solid #fff;
-          border-radius: 3px;
-          color: #fff;
-        }
-      }
-
-      .item {
-        display: flex;
-        align-items: center;
-
-        .text {
-          width: 100%;
-
-          p {
-            margin: 0px;
-          }
-
-          h1, h2, h3, h4, h5, h6 {
-            margin: 0px;
-          }
-        }
-      }
-
-      .item {
-        .delete {
-          opacity: 0
-        }
-      }
-
-      .item:hover {
-        .delete {
-          opacity: 1
-        }
-      }
-      .item.checked {
-        text-decoration: line-through;
-      }
-
-      .alldone {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 18px 0px;
-
-        .check {
-          font-size: 48px;
-          color: #888;
-        }
-
-        div {
-          font-size: 16px;
-          margin: 6px;
-        }
-      }
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: row;
-      font-size: 24px;
-
-      .handle {
-        margin-right: 12px;
-        margin-left: 12px;
-        transition: 0.5s;
-        cursor: pointer;
-      }
-    }
-
-
-  }
-  .todo.active {
-    .handle {
-      transform: rotate(180deg);
-    }
-  }
+  // }
+  // .todo.active {
+  //   .handle {
+  //     transform: rotate(180deg);
+  //   }
+  // }
 
   .clock {
     position: absolute;
@@ -268,113 +150,11 @@ a {
   }
 }
 
-.settings {
-  position: absolute;
-  top: -100%;
-  left: 0;
-  z-index: 20;
-  width: 100%;
-  height: 100%;
-  color: #fff;
-  background: rgba(34,34,34, 0.9);
-  opacity: 0;
-  transition: 0.5s;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-
-  .btn {
-    text-decoration: none;
-    padding: 6px;
-    margin: 4px 4px 4px 0px;
-    border: 1px solid #fff;
-    border-radius: 3px;
-    color: #fff;
-  }
-
-  .close-btn {
-    margin: 12px;
-    padding: 0px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 40;
-    font-size: 24px;
-  }
-
-  div {
-    margin: 24px 25%;
-    padding: 0px 4px 32px 4px;
-
-    h1 {
-      font-weight: lighter;
-      margin: 8px 0px;
-    }
-  }
-
-  div:not(:last-child):not(:first-child) {
-    border-bottom: 1px dashed #888;
-  }
-
-  .login-prompt {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 18px 0px;
-
-    p {
-      margin: 0;
-      margin-bottom: 10px;
-    }
-  }
-
-  input[type="text"] {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #fff;
-    width: 100%;
-    margin-top: 8px;
-    color: #fff;
-  }
-
-  input[type="text"]:focus {
-    outline: none;
-  }
-
-}
-
 .settings.show {
   top: 0;
   left: 0;
   opacity: 1;
 }
-
-.err {
-  background: #FA8072;
-  padding: 12px;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: -100%;
-  left: 0;
-  z-index: 1000;
-  margin: 12px;
-
-  h1 {
-    margin: 0px 8px;
-  }
-}
-
-.err.show {
-  bottom: 0;
-}
-
 
 .loader,
 .loader:before,
