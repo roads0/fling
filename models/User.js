@@ -9,11 +9,8 @@ const userSchema = new Schema({
   googleId: String,
   api_token: { type: String, required: true },
   background: String,
-  bgCss: String,
-  settings: {
-    degreeType: String,
-    subreddits: Array
-  },
+  settings: { type: String, required: true, default: () => {return "{}"} },
+  plugins: { type: Array, default: () => {return ['todo', 'redditbackground', 'weather', 'clock']}, required: true },
   todo: [TodoModel.schema]
 });
 
@@ -63,15 +60,27 @@ userSchema.methods.remove_todo = function(todoid, cb) { // http://mongoosejs.com
   })
 }
 
-userSchema.methods.setting_manager = function(setting, cb) {
-  this.settings.subreddits = Array.isArray(setting.subreddits) ? setting.subreddits.map(r => {return encodeURI(r)}) : []
-  this.settings.degreeType = setting.degreeType == 'C' ? 'C' : 'F'
+userSchema.methods.setting_manager = function(settings, cb) {
+  this.settings = JSON.stringify(Object.assign(JSON.parse(this.settings), settings))
   this.save((err) => {
     if(err) {
       cb(err)
     } else {
       this.save((err) => {
-        cb(null, this.toObject())
+        cb(null, this.toObject().settings)
+      })
+    }
+  })
+}
+
+userSchema.methods.plugin_manager = function(plugins, cb) {
+  this.plugins = plugins
+  this.save((err) => {
+    if(err) {
+      cb(err)
+    } else {
+      this.save((err) => {
+        cb(null, this.toObject().plugins)
       })
     }
   })

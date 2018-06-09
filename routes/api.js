@@ -24,6 +24,7 @@ router.get('/me', checkAuth, function(req, res, next) {
   let cleanUser = Object.assign({}, req.user.toObject())
   delete cleanUser.token
   delete cleanUser.api_token
+  cleanUser.settings = JSON.parse(cleanUser.settings)
   res.json(cleanUser)
 });
 
@@ -43,13 +44,6 @@ router.post('/me/token', checkAuth, function(req, res, next) {
       res.json(api_token)
     }
   })
-});
-
-router.get('/me', checkAuth, function(req, res, next) {
-  let cleanUser = Object.assign({}, req.user.toObject())
-  delete cleanUser.token
-  delete cleanUser.api_token
-  res.json(cleanUser)
 });
 
 router.get('/weather/:place', (req, res, next) => {
@@ -125,7 +119,7 @@ router.delete('/todo/:id', (req, res, next) => {
 router.post('/me/settings', (req, res, next) => {
   let count = 0;
   let validReddits = [], invalidReddits = []
-  if(req.body.subreddits.length > 0) {
+  if(Array.isArray(req.body.subreddits) && req.body.subreddits.length > 0) {
     req.body.subreddits.forEach(reddit => {
       check_subreddit(reddit, (err, valid) => {
         if(err||!valid) {
@@ -140,7 +134,7 @@ router.post('/me/settings', (req, res, next) => {
             if (err) {
               next(err)
             } else {
-              setting.invalidReddits = invalidReddits
+              setting.subreddits = { valid: validReddits, invalid: invalidReddits }
               res.json(setting)
             }
           })
@@ -148,16 +142,24 @@ router.post('/me/settings', (req, res, next) => {
       })
     })
   } else {
-    req.body.subreddits = validReddits
     req.user.setting_manager(req.body, (err, setting) => {
       if (err) {
         next(err)
       } else {
-        setting.invalidReddits = invalidReddits
         res.json(setting)
       }
     })
   }
+})
+
+router.post('/me/plugins', (req, res, next) => {
+  req.user.plugin_manager(req.body, (err, plugins) => {
+    if (err) {
+      next(err)
+    } else {
+      res.json(plugins)
+    }
+  })
 })
 
 module.exports = router;

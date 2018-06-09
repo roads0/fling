@@ -15,11 +15,6 @@ function load() {
   getWeather()
 }
 
-function updateClock() {
-  document.querySelector('.date').innerText = moment().format('dddd, D MMMM YYYY')
-  document.querySelector('.time').innerHTML = moment().format('hh:MM[<div class="small">]A[</div>]')
-}
-
 // TODO: check if subreddit is valid
 function setBackground() {
   fetch('/api/background', {credentials: 'include'}).then(r => {
