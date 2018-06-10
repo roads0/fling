@@ -1,7 +1,8 @@
-fetch('/lib/moment.js').then(r => {return r.text()}).then(res => {
-  eval(res)
+fetch('/lib/moment.js').then((r) => r.text()).
+  then((res) => {
+    eval(res)
 
-  utils.addCss(`.overlay .clock {
+    utils.addCss(`.overlay .clock {
     position: absolute;
     bottom: 4px;
     left: 4px;
@@ -20,16 +21,17 @@ fetch('/lib/moment.js').then(r => {return r.text()}).then(res => {
         padding-bottom: 8px;
         font-weight: normal; }`)
 
-  fling.overlay.appendChild(utils.strToDom('<div class="clock"><div class="date"></div><div class="time"><div class="small"></div></div></div>'))
+    fling.overlay.appendChild(utils.strToDom('<div class="clock"><div class="date"></div><div class="time"><div class="small"></div></div></div>'))
 
-  function updateClock() {
-    document.querySelector('.date').innerText = moment().format('dddd, D MMMM YYYY')
-    document.querySelector('.time').innerHTML = moment().format('hh:mm[<div class="small">]A[</div>]')
-    setTimeout(updateClock, 500)
-  }
+    function updateClock() {
+      document.querySelector('.date').innerText = moment().format('dddd, D MMMM YYYY')
+      document.querySelector('.time').innerHTML = moment().format('hh:mm[<div class="small">]A[</div>]')
+      setTimeout(updateClock, 500)
+    }
 
-  updateClock()
+    updateClock()
 
-}).catch(err => {
-  throw err
-})
+  }).
+  catch((err) => {
+    throw err
+  })

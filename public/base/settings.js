@@ -1,4 +1,4 @@
-var settings = utils.strToDom('<div class="settings"><div class="close-btn"><i class="fas fa-times"></i></div></div>')
+let settings = utils.strToDom('<div class="settings"><div class="close-btn"><i class="fas fa-times"></i></div></div>')
 
 utils.addCss(`
   .settings {
@@ -70,29 +70,29 @@ utils.addCss(`
   opacity: 1; }
 `)
 
-var preSaveArr = []
+let preSaveArr = []
 
 document.body.appendChild(settings)
 
-settings.open = function openSettings() {
+settings.open = () => {
   settings.classList.add('show')
 }
 
-settings.close = function closeSettings() {
-  var newSettings = {}
-  settings.querySelectorAll('.section').forEach(section => {
-    if(section.querySelector('input')) {
-      var sectionSettings = {}
-      section.querySelectorAll('input:not([ignore])').forEach(input => {
-        var key = (input.getAttribute('name') || input.id)
-        if(key) {
+settings.close = () => {
+  let newSettings = {}
+  settings.querySelectorAll('.section').forEach((section) => {
+    if (section.querySelector('input')) {
+      let sectionSettings = {}
+      section.querySelectorAll('input:not([ignore])').forEach((input) => {
+        let key = input.getAttribute('name') || input.id
+        if (key) {
           sectionSettings[key] = input.value
         }
       })
       newSettings[section.getAttribute('module')] = sectionSettings
     }
   })
-  if(fling.user) {
+  if (fling.user) {
     fling.user.settings = newSettings
   }
   settings.dispatchEvent(new CustomEvent("update", {detail: newSettings}))
@@ -101,8 +101,8 @@ settings.close = function closeSettings() {
   settings.save()
 }
 
-settings.registerPresave = function registerPresave(func) {
-  if(utils.toType(func) == 'function') {
+settings.registerPresave = (func) => {
+  if (utils.toType(func) === 'function') {
     preSaveArr.push(func)
   } else {
     throw new Error('Passed preSaveArr argument was not a function!')
@@ -116,14 +116,24 @@ fling.actionbar.appendChild(utils.strToDom('<div class="btn settings-btn"><i cla
 })
 
 function getFnArgs(func) {
-  return func.toString().split('{')[0].split('(')[1].split(')')[0].split(',')
+  console.log(func)
+  let start = func.toString().split('{')[0]
+  let args
+  if (start.includes('(')) {
+    args = start.split('(')[1].split(')')[0].split(',')
+  } else {
+    args = [start.split('=>')[0].replace(/ /g, '')]
+  }
+  console.log(args)
+
+  return args
 }
 
 function preSave(settings, cb) {
   function preSaveLoop(funcs) {
-    if(funcs[0]) {
-      var func = funcs.shift()
-      if(getFnArgs(func).length == 2) {
+    if (funcs[0]) {
+      let func = funcs.shift()
+      if (getFnArgs(func).length == 2) {
         func(settings, () => {
           preSaveLoop(funcs)
         })
@@ -145,12 +155,11 @@ function save(settings, cb) {
       credentials: 'include',
       method: 'POST',
       body: JSON.stringify(settings),
-      headers: new Headers({
-        'Content-Type': 'application/json'
+      headers: new Headers({'Content-Type': 'application/json'})
+    }).then((r) => r.json()).
+      then((res) => {
+        postSave(res, cb)
       })
-    }).then(r => {return r.json()}).then(res => {
-      postSave(res, cb)
-    })
   })
 }
 
@@ -158,7 +167,9 @@ settings.save = save
 
 function postSave(res, cb) {
   console.log(res)
-  cb()
+  if (utils.toType(cb) == 'function') {
+    cb()
+  }
 }
 
 fling.settings = settings
