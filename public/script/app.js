@@ -12,6 +12,7 @@ window.onload = () => {
   require.root = '/base/'
   require.many([
     'proxy',
+    'toaster',
     'actionbar',
     'settings',
     'user',

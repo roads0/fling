@@ -7,9 +7,7 @@
     try {
       return eval(`${str}\n\n//@ sourceURL=${src}`) // eslint-disable-line
     } catch (err) {
-      console.error(err)
-
-      return err
+      throw err
     }
   }
 

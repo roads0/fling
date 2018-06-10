@@ -1,5 +1,5 @@
 /* eslint-env browser */
-/* global utils, fling */
+/* global utils, fling, toaster */
 
 let settings = utils.strToDom('<div class="settings"><div class="close-btn"><i class="fas fa-times"></i></div></div>')
 
@@ -134,6 +134,7 @@ function preSave(newsettings, cb) {
 
 function postSave(newSettings, res, cb) {
   settings.dispatchEvent(new CustomEvent("update", {detail: newSettings}))
+  toaster('Settings', 'Your settings were saved.')
   if (utils.toType(cb) === 'function') {
     cb()
   }
