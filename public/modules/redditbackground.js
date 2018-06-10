@@ -15,7 +15,7 @@ if (fling.user) {
 
 if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'array') {
   redditsettings.querySelector('.subreddits').value = fling.user.settings.background.subreddits.join(', ')
-} else if (fling.user && utils.toType(fling.user.settings.background.subreddits.length) === 'string') {
+} else if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'string') {
   fling.user.settings.background.subreddits = fling.user.settings.background.subreddits.replace(/ /g, '').split(',')
   redditsettings.querySelector('.subreddits').value = fling.user.settings.background.subreddits.join(', ')
 } else if (fling.user) {
@@ -24,6 +24,7 @@ if (fling.user && fling.user.settings.background && utils.toType(fling.user.sett
     'SpacePorn',
     'ExposurePorn'
   ]
+  redditsettings.querySelector('.subreddits').value = fling.user.settings.background.subreddits.join(', ')
 }
 
 fling.settings.registerPresave((settings) => {
