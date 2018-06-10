@@ -13,7 +13,7 @@ if (fling.user) {
   `))
 }
 
-if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'array') {
+if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'array' && !fling.user.settings.background.subreddits[0] === "") {
   redditsettings.querySelector('.subreddits').value = fling.user.settings.background.subreddits.join(', ')
 } else if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'string') {
   fling.user.settings.background.subreddits = fling.user.settings.background.subreddits.replace(/ /g, '').split(',')
