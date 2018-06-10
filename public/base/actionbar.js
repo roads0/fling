@@ -17,6 +17,6 @@ utils.addCss(`
       margin-left: 4px;
       cursor: pointer; }`)
 
-var actionbar = fling.overlay.appendChild(utils.strToDom(`<div class="actionbar"></div>`))
+let actionbar = fling.overlay.appendChild(utils.strToDom(`<div class="actionbar"></div>`))
 
 fling.actionbar = actionbar

@@ -1,25 +1,38 @@
 /* eslint-env browser */
+/* global require */
+
 
 window.onload = () => {
 
-window.fling = {
-  overlay: document.querySelector('body .overlay')
-}
+  let fling = {overlay: document.querySelector('body .overlay')}
 
-// require base modules
-requireModules.root = '/base/'
-requireModules(['actionbar', 'settings', 'user', 'plugins'], function() {
-  var plugins
+  window.fling = fling
 
-  if(fling.user) {
-    plugins = fling.user.plugins.slice(0);
-  } else {
-    plugins = ['todo', 'weather', 'redditbackground', 'clock']
-  }
+  // require base modules
+  require.root = '/base/'
+  require.many([
+    'proxy',
+    'toaster',
+    'actionbar',
+    'settings',
+    'user',
+    'plugins'
+  ], function() {
+    let plugins
 
-  requireModules.root = '/modules/'
-  requireModules(plugins)
-})
+    if (fling.user) {
+      plugins = fling.user.plugins.slice(0)
+    } else {
+      plugins = [
+        'todo',
+        'weather',
+        'redditbackground',
+        'clock'
+      ]
+    }
 
+    require.root = '/modules/'
+    require.many(plugins)
+  })
 
 }

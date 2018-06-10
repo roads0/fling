@@ -1,24 +1,32 @@
-const express = require('express');
-const weather = require('weather-js');
-const snoowrap = require('snoowrap');
-const superagent = require('superagent');
-const Todo = require('../models/Todo');
-const config = require('../config');
-const router = express.Router();
+const express = require('express')
+const weather = require('weather-js')
+const snoowrap = require('snoowrap')
+const superagent = require('superagent')
+const Todo = require('../models/Todo')
+const config = require('../config')
+const router = express.Router()
 
 const reddit = new snoowrap({
   userAgent: 'An in-browser dashboard service',
   clientId: config.snoowrap.clientId,
   clientSecret: config.snoowrap.clientSecret,
   refreshToken: config.snoowrap.refreshToken
-});
+})
 
-const defaultReddits = ['EarthPorn', 'SpacePorn', 'ExposurePorn'] //add dankmemes for style points
+const defaultReddits = [
+  'EarthPorn',
+  'SpacePorn',
+  'ExposurePorn'
+] //add dankmemes for style points
 
-/* GET home page. */
+/* gET home page. */
 router.get('/', function(req, res, next) {
-  res.json(['welcome','to','memeland'])
-});
+  res.json([
+    'welcome',
+    'to',
+    'memeland'
+  ])
+})
 
 router.get('/me', checkAuth, function(req, res, next) {
   let cleanUser = Object.assign({}, req.user.toObject())
@@ -26,15 +34,15 @@ router.get('/me', checkAuth, function(req, res, next) {
   delete cleanUser.api_token
   cleanUser.settings = JSON.parse(cleanUser.settings)
   res.json(cleanUser)
-});
+})
 
 router.get('/me/todos', checkAuth, function(req, res, next) {
   res.json(req.user.toObject().todo)
-});
+})
 
 router.get('/me/token', checkAuth, function(req, res, next) {
   res.json(req.user.api_token)
-});
+})
 
 router.post('/me/token', checkAuth, function(req, res, next) {
   req.user.token_reset((err, api_token) => {
@@ -44,12 +52,14 @@ router.post('/me/token', checkAuth, function(req, res, next) {
       res.json(api_token)
     }
   })
-});
+})
 
 router.get('/weather/:place', (req, res, next) => {
-  let degreeType = req.user ? req.user.settings ? req.user.settings.degreeType : 'F' : 'F'
-  weather.find({search: req.params.place, degreeType: degreeType || 'F'}, function (err, result) {
-    if(err) {
+  weather.find({
+    search: req.params.place,
+    degreeType: req.query.unit || 'F'
+  }, function (err, result) {
+    if (err) {
       next(err)
     } else {
       res.json(result[0])
@@ -93,16 +103,19 @@ router.post('/todo/create', (req, res, next) => {
 })
 
 router.post('/todo/edit/:id', (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({err: 'missing param!'})
+  if (req.body) {
+    req.user.edit_todo(req.params.id, {
+      edited_todo: req.body.edited_todo,
+      checked: req.body.checked
+    }, (err, todo) => {
+      if (err) {
+        next(err)
+      } else {
+        res.json(todo)
+      }
+    })
   } else {
-      req.user.edit_todo(req.params.id, {edited_todo: req.body.edited_todo, checked: req.body.checked}, (err, todo) => {
-        if (err) {
-          next(err)
-        } else {
-          res.json(todo)
-        }
-      })
+    res.status(400).json({err: 'missing param!'})
   }
 })
 
@@ -117,24 +130,28 @@ router.delete('/todo/:id', (req, res, next) => {
 })
 
 router.post('/me/settings', (req, res, next) => {
-  let count = 0;
-  let validReddits = [], invalidReddits = []
-  if(Array.isArray(req.body.subreddits) && req.body.subreddits.length > 0) {
-    req.body.subreddits.forEach(reddit => {
+  let count = 0
+  let validReddits = [],
+    invalidReddits = []
+  if (Array.isArray(req.body.subreddits) && req.body.subreddits.length > 0) {
+    req.body.subreddits.forEach((reddit) => {
       check_subreddit(reddit, (err, valid) => {
-        if(err||!valid) {
+        if (err || !valid) {
           invalidReddits.push(reddit)
         } else {
           validReddits.push(reddit)
         }
         count++
-        if(count == req.body.subreddits.length) {
+        if (count == req.body.subreddits.length) {
           req.body.subreddits = validReddits
           req.user.setting_manager(req.body, (err, setting) => {
             if (err) {
               next(err)
             } else {
-              setting.subreddits = { valid: validReddits, invalid: invalidReddits }
+              setting.subreddits = {
+                valid: validReddits,
+                invalid: invalidReddits
+              }
               res.json(setting)
             }
           })
@@ -162,14 +179,14 @@ router.post('/me/plugins', (req, res, next) => {
   })
 })
 
-module.exports = router;
+module.exports = router
 
-function random_subreddit(subreddit_list, cb){
+function random_subreddit(subreddit_list, cb) {
   let mySubreddit = subreddit_list[Math.floor(Math.random() * subreddit_list.length)]
   check_subreddit(mySubreddit, (err, valid) => {
-    if(err) {
+    if (err) {
       cb(err)
-    } else if(valid) {
+    } else if (valid) {
       cb(null, mySubreddit)
     } else {
       cb(new Error('subreddit not valid'))
@@ -177,44 +194,53 @@ function random_subreddit(subreddit_list, cb){
   })
 }
 
-function check_subreddit(subreddit, cb){
-  superagent.get(`https://reddit.com/r/${subreddit}.json`).redirects(1).end((err, resp) => {
-    cb(err, resp.statusCode == 200)
-  })
+function check_subreddit(subreddit, cb) {
+  superagent.get(`https://reddit.com/r/${subreddit}.json`).redirects(1)
+    .end((err, resp) => {
+      cb(err, resp.statusCode == 200)
+    })
 }
 
 function get_image(subreddits, cb, repeated) {
   repeated = repeated || 1
   if (repeated > 4) {
-    cb(null, {body: require('fs').readFileSync('./public/images/nopic.png'), type: 'image/png'})
+    cb(null, {
+      body: require('fs').readFileSync('./public/images/nopic.png'),
+      type: 'image/png'
+    })
   }
 
   random_subreddit(subreddits, (err, subreddit) => {
-    if(err) {
+    if (err) {
       cb(err)
     } else {
-      reddit.getSubreddit(subreddit).getTop({time: 'week'}).then((data) => {
-        let rand = Math.floor(Math.random() * data.length)
-        superagent.get(data[rand].url).end((err, resp) => {
-          if (err) {
-            cb(err)
-          } else {
-            if ((/image\/.+/i).test(resp.headers['content-type'])) {
-              cb(null, {body: resp.body, type: resp.headers['content-type'], size: resp.headers['content-length'], src: data[rand]})
+      reddit.getSubreddit(subreddit).getTop({time: 'week'})
+        .then((data) => {
+          let rand = Math.floor(Math.random() * data.length)
+          superagent.get(data[rand].url).end((err, resp) => {
+            if (err) {
+              cb(err)
+            } else if ((/image\/.+/i).test(resp.headers['content-type'])) {
+              cb(null, {
+                body: resp.body,
+                type: resp.headers['content-type'],
+                size: resp.headers['content-length'],
+                src: data[rand]
+              })
             } else {
               get_image(subreddits, cb, repeated++)
             }
-          }
+          })
         })
-      }).catch(err => {
-        cb(err)
-      })
+        .catch((err) => {
+          cb(err)
+        })
     }
   })
 }
 
 function checkAuth(req, res, next) {
-  if(req.user) {
+  if (req.user) {
     next()
   } else {
     res.status(401).json('log in you dumbo')

@@ -1,6 +1,7 @@
-fetch('/lib/moment.js').then(r => {return r.text()}).then(res => {
-  eval(res)
+/* eslint-env browser */
+/* global fling, utils, moment */
 
+require('/lib/moment.js', () => {
   utils.addCss(`.overlay .clock {
     position: absolute;
     bottom: 4px;
@@ -30,6 +31,4 @@ fetch('/lib/moment.js').then(r => {return r.text()}).then(res => {
 
   updateClock()
 
-}).catch(err => {
-  throw err
 })

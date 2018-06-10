@@ -67,8 +67,73 @@ utils.addCss(`
 }
 `)
 
-if(fling.user) {
-  var pluginList = fling.settings.appendChild(utils.strToDom(`
+let pluginList
+
+function validatePlugin(name, cb) {
+  let modPath = require.nameToPath(name)
+  fetch(modPath).then((res) => res.text())
+    .then((res) => {
+      try {
+        new Function(res) // eslint-disable-line
+        cb(null, true)
+      } catch (err) {
+        cb(err)
+      }
+    })
+    .catch((err) => {
+      cb(err)
+    })
+}
+
+function renderPlugin(name, loading) {
+  return utils.strToDom(`
+    <div class="plugin">
+    ${loading
+    ? '<div class="loadSpinner"><i class="fas fa-sync-alt"></i></div>'
+    : '<div class="deletePlugin"><i class="far fa-trash-alt"></i></div>'}
+      <div class="pluginName">${name}</div>
+      </div>`)
+}
+
+function savePlugins() {
+  fetch('/api/me/plugins', {
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify(fling.user.plugins),
+    headers: new Headers({'Content-Type': 'application/json'})
+  }).then((res) => res.json())
+    .then(() => {
+    // toaster.toast('saved plugins!')
+    })
+}
+
+function removePlugin(name, pluginElement) {
+  fling.user.plugins.splice(fling.user.plugins.indexOf(name), 1)
+  let errBtn = utils.strToDom('<div class="pluginRemoved"><i class="fas fa-times"></i></div>')
+  pluginElement.replaceChild(errBtn, pluginElement.querySelector('.deletePlugin'))
+  pluginElement.querySelector('.pluginName').appendChild(utils.strToDom('<span class="err">(Plugin will be removed on next reload)</span>'))
+  savePlugins()
+}
+
+function addPlugin(name) {
+  let pluginElement = pluginList.querySelector('.pluginWrap').appendChild(renderPlugin(name, true))
+  validatePlugin(name, (err) => {
+    if (err) {
+      let errBtn = utils.strToDom('<div class="pluginRemoved"><i class="fas fa-times"></i></div>')
+      pluginElement.replaceChild(errBtn, pluginElement.querySelector('.loadSpinner'))
+      pluginElement.querySelector('.pluginName').appendChild(utils.strToDom('<span class="err">(Plugin failed to load)</span>'))
+    } else {
+      let goodBtn = utils.strToDom('<div class="pluginAdded"><i class="fas fa-check"></i></div>')
+      pluginElement.replaceChild(goodBtn, pluginElement.querySelector('.loadSpinner'))
+      pluginElement.querySelector('.pluginName').appendChild(utils.strToDom('<span class="good">(Plugin will activate on reload)</span>'))
+      fling.user.plugins.push(name)
+      savePlugins()
+    }
+  })
+}
+
+if (fling.user) {
+  pluginList = fling.settings.appendChild(utils.strToDom(`
     <div class="section" module="plugins">
       <h1>Plugin Settings</h1>
       <p>Loaded Plugins:</p>
@@ -81,16 +146,16 @@ if(fling.user) {
     </div>
   `))
 
-  fling.user.plugins.forEach(plugin => {
-    var pluginElement = pluginList.querySelector('.pluginWrap').appendChild(renderPlugin(plugin))
+  fling.user.plugins.forEach((plugin) => {
+    let pluginElement = pluginList.querySelector('.pluginWrap').appendChild(renderPlugin(plugin))
     pluginElement.querySelector('.deletePlugin').addEventListener('click', () => {
       removePlugin(plugin, pluginElement)
     })
   })
 
-  var pluginInput = pluginList.querySelector('.newPlugin')
-  pluginInput.addEventListener('keydown', e => {
-    if(e.keyCode == 13 && pluginInput.value != '' && !fling.user.plugins.includes(pluginInput.value)) {
+  let pluginInput = pluginList.querySelector('.newPlugin')
+  pluginInput.addEventListener('keydown', (evt) => {
+    if (evt.keyCode === 13 && pluginInput.value !== '' && !fling.user.plugins.includes(pluginInput.value)) {
       addPlugin(document.querySelector('.newPlugin').value)
       document.querySelector('.newPlugin').value = ''
     }
@@ -107,71 +172,4 @@ if(fling.user) {
       </p>
     </div>
   `))
-}
-
-function addPlugin(name) {
-  pluginElement = pluginList.querySelector('.pluginWrap').appendChild(renderPlugin(name, true))
-  validatePlugin(name, (err) => {
-    if(err) {
-      var errBtn = strToDom('<div class="pluginRemoved"><i class="fas fa-times"></i></div>')
-      pluginElement.replaceChild(errBtn, pluginElement.querySelector('.loadSpinner'))
-      pluginElement.querySelector('.pluginName').appendChild(strToDom('<span class="err">(Plugin failed to load)</span>'))
-    } else {
-      var goodBtn = strToDom('<div class="pluginAdded"><i class="fas fa-check"></i></div>')
-      pluginElement.replaceChild(goodBtn, pluginElement.querySelector('.loadSpinner'))
-      pluginElement.querySelector('.pluginName').appendChild(strToDom('<span class="good">(Plugin will activate on reload)</span>'))
-      fling.user.plugins.push(name)
-      savePlugins()
-    }
-  })
-}
-
-function validatePlugin(modPath, cb) {
-  if(!(modPath.startsWith('https://') || modPath.startsWith('http://'))) {
-    modPath = (requireModules.root || '/modules/') + modPath
-  }
-  if(!modPath.endsWith('.js')) {
-    modPath = modPath + '.js'
-  }
-  fetch(modPath).then(r => {return r.text()}).then(res => {
-    try {
-      new Function(res)
-      cb(null, true)
-    } catch(err) {
-      cb(err)
-    }
-  }).catch(err => {
-    cb(err)
-  })
-}
-
-function renderPlugin(name, loading) {
-  return utils.strToDom(`
-    <div class="plugin">
-      ${ loading ?
-        '<div class="loadSpinner"><i class="fas fa-sync-alt"></i></div>' :
-        '<div class="deletePlugin"><i class="far fa-trash-alt"></i></div>'}
-      <div class="pluginName">${name}</div>
-    </div>`)
-}
-
-function removePlugin(name, pluginElement) {
-  fling.user.plugins.splice(fling.user.plugins.indexOf(name), 1);
-  var errBtn = strToDom('<div class="pluginRemoved"><i class="fas fa-times"></i></div>')
-  pluginElement.replaceChild(errBtn, pluginElement.querySelector('.deletePlugin'))
-  pluginElement.querySelector('.pluginName').appendChild(strToDom('<span class="err">(Plugin will be removed on next reload)</span>'))
-  savePlugins()
-}
-
-function savePlugins() {
-  fetch('/api/me/plugins', {
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify(fling.user.plugins),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  }).then(r => {return r.json()}).then(res => {
-    // toaster.toast('saved plugins!')
-  })
 }
