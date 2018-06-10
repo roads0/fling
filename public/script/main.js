@@ -21,8 +21,8 @@ function setBackground() {
     console.log(JSON.parse(decodeURI(r.headers.get('X-More-Info'))))
 
     return r.blob()
-  }).
-    then((bg) => {
+  })
+    .then((bg) => {
       const reader = new FileReader()
       reader.onloadend = () => {
         document.querySelector('.bg').style['background-image'] = `url("${reader.result}")`
@@ -32,16 +32,16 @@ function setBackground() {
         }, 500)
       }
       reader.readAsDataURL(bg)
-    }).
-    catch((err) => {
+    })
+    .catch((err) => {
       showErr(err.message)
       document.querySelector('.bg').style['background-image'] = 'url("/images/nopic.png")'
     })
 }
 
 function getUser() {
-  fetch('/api/me', {credentials: 'include'}).then((r) => r.json()).
-    then((res) => {
+  fetch('/api/me', {credentials: 'include'}).then((r) => r.json())
+    .then((res) => {
       if (res == 'log in you dumbo') {
         document.querySelector('.todo .list').innerHTML = '<div class="login-prompt"><p>Please log in</p><a href="/auth">Log in</a></div>'
         document.querySelector('.settings').innerHTML += '<div class="login-prompt"><p>To set custom settings, you need to log in.</p><a class="btn" href="/auth">Log in</a></div>'
@@ -98,8 +98,8 @@ function getUser() {
 function getWeather(location) {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      fetch(`/api/weather/${position.coords.latitude},${position.coords.longitude}`, {credentials: 'include'}).then((r) => r.json()).
-        then((res) => {
+      fetch(`/api/weather/${position.coords.latitude},${position.coords.longitude}`, {credentials: 'include'}).then((r) => r.json())
+        .then((res) => {
           document.querySelector('.weather').innerHTML = `<div class="location">${res.location.name}</div><div class="current"><i class="weathericon fas fa-${iconType(res.current.skycode)}"></i><div class="temp">${res.current.temperature}°${res.location.degreetype}</div></div>`
         })
     })
@@ -157,8 +157,8 @@ function createItem(name) {
     method: 'POST',
     body: JSON.stringify({title: name}),
     headers: new Headers({'Content-Type': 'application/json'})
-  }).then((r) => r.json()).
-    then((res) => {
+  }).then((r) => r.json())
+    .then((res) => {
       renderItem(res)
     })
 }
@@ -219,8 +219,8 @@ function checkItem(id, checked, cb) {
     method: 'POST',
     body: JSON.stringify({checked}),
     headers: new Headers({'Content-Type': 'application/json'})
-  }).then((r) => r.json()).
-    then((res) => {
+  }).then((r) => r.json())
+    .then((res) => {
       if (cb) {
         cb()
       }
@@ -233,8 +233,8 @@ function editItem(id, edit, cb) {
     method: 'POST',
     body: JSON.stringify({edited_todo: edit}),
     headers: new Headers({'Content-Type': 'application/json'})
-  }).then((r) => r.json()).
-    then((res) => {
+  }).then((r) => r.json())
+    .then((res) => {
       if (cb) {
         cb()
       }
@@ -245,8 +245,8 @@ function deleteItem(id) {
   fetch(`/api/todo/${id}`, {
     credentials: 'include',
     method: 'DELETE'
-  }).then((r) => r.json()).
-    then((res) => {
+  }).then((r) => r.json())
+    .then((res) => {
       if (document.querySelectorAll('.item').length == 0) {
         document.querySelector('.todo .list .items').innerHTML = '<div class="alldone"><i class="fas fa-check check"></i><div>You\'re all done!</div></div>'
       }
@@ -259,13 +259,13 @@ function updateUserSettings(cb) {
     method: 'POST',
     body: JSON.stringify({
       degreeType: document.querySelector('#tempF').checked ? 'F' : 'C',
-      subreddits: document.querySelector('input.reddits').value.replace(/ /gi, '').split(',').
-        filter((r) => Boolean(r)).
-        map((r) => encodeURI(r))
+      subreddits: document.querySelector('input.reddits').value.replace(/ /gi, '').split(',')
+        .filter((r) => Boolean(r))
+        .map((r) => encodeURI(r))
     }),
     headers: new Headers({'Content-Type': 'application/json'})
-  }).then((r) => r.json()).
-    then((res) => {
+  }).then((r) => r.json())
+    .then((res) => {
       if (cb) {
         cb()
       }

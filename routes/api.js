@@ -55,10 +55,9 @@ router.post('/me/token', checkAuth, function(req, res, next) {
 })
 
 router.get('/weather/:place', (req, res, next) => {
-  let degreeType = req.user ? req.user.settings ? req.user.settings.degreeType : 'F' : 'F'
   weather.find({
     search: req.params.place,
-    degreeType: degreeType || 'F'
+    degreeType: req.query.unit || 'F'
   }, function (err, result) {
     if (err) {
       next(err)
@@ -104,9 +103,7 @@ router.post('/todo/create', (req, res, next) => {
 })
 
 router.post('/todo/edit/:id', (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({err: 'missing param!'})
-  } else {
+  if (req.body) {
     req.user.edit_todo(req.params.id, {
       edited_todo: req.body.edited_todo,
       checked: req.body.checked
@@ -117,6 +114,8 @@ router.post('/todo/edit/:id', (req, res, next) => {
         res.json(todo)
       }
     })
+  } else {
+    res.status(400).json({err: 'missing param!'})
   }
 })
 
@@ -196,8 +195,8 @@ function random_subreddit(subreddit_list, cb) {
 }
 
 function check_subreddit(subreddit, cb) {
-  superagent.get(`https://reddit.com/r/${subreddit}.json`).redirects(1).
-    end((err, resp) => {
+  superagent.get(`https://reddit.com/r/${subreddit}.json`).redirects(1)
+    .end((err, resp) => {
       cb(err, resp.statusCode == 200)
     })
 }
@@ -215,8 +214,8 @@ function get_image(subreddits, cb, repeated) {
     if (err) {
       cb(err)
     } else {
-      reddit.getSubreddit(subreddit).getTop({time: 'week'}).
-        then((data) => {
+      reddit.getSubreddit(subreddit).getTop({time: 'week'})
+        .then((data) => {
           let rand = Math.floor(Math.random() * data.length)
           superagent.get(data[rand].url).end((err, resp) => {
             if (err) {
@@ -232,8 +231,8 @@ function get_image(subreddits, cb, repeated) {
               get_image(subreddits, cb, repeated++)
             }
           })
-        }).
-        catch((err) => {
+        })
+        .catch((err) => {
           cb(err)
         })
     }

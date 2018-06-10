@@ -1,3 +1,6 @@
+/* eslint-env browser */
+/* global utils, fling */
+
 let settings = utils.strToDom('<div class="settings"><div class="close-btn"><i class="fas fa-times"></i></div></div>')
 
 utils.addCss(`
@@ -30,9 +33,9 @@ utils.addCss(`
     color: #fff;
     box-sizing: border-box; }
   .settings .close-btn {
-    margin: 12px;
+    margin: 12px 24px;
     padding: 0px;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     z-index: 40;
@@ -54,7 +57,7 @@ utils.addCss(`
     .settings .login-prompt p {
       margin: 0;
       margin-bottom: 10px; }
-  .settings input[type="text"] {
+  .settings input[type="text"], .settings input[type="password"] {
     background: transparent;
     border: none;
     border-bottom: 1px solid #fff;
@@ -79,25 +82,7 @@ settings.open = () => {
 }
 
 settings.close = () => {
-  let newSettings = {}
-  settings.querySelectorAll('.section').forEach((section) => {
-    if (section.querySelector('input')) {
-      let sectionSettings = {}
-      section.querySelectorAll('input:not([ignore])').forEach((input) => {
-        let key = input.getAttribute('name') || input.id
-        if (key) {
-          sectionSettings[key] = input.value
-        }
-      })
-      newSettings[section.getAttribute('module')] = sectionSettings
-    }
-  })
-  if (fling.user) {
-    fling.user.settings = newSettings
-  }
-  settings.dispatchEvent(new CustomEvent("update", {detail: newSettings}))
   settings.classList.remove('show')
-
   settings.save()
 }
 
@@ -116,7 +101,6 @@ fling.actionbar.appendChild(utils.strToDom('<div class="btn settings-btn"><i cla
 })
 
 function getFnArgs(func) {
-  console.log(func)
   let start = func.toString().split('{')[0]
   let args
   if (start.includes('(')) {
@@ -124,52 +108,69 @@ function getFnArgs(func) {
   } else {
     args = [start.split('=>')[0].replace(/ /g, '')]
   }
-  console.log(args)
 
   return args
 }
 
-function preSave(settings, cb) {
+function preSave(newsettings, cb) {
   function preSaveLoop(funcs) {
     if (funcs[0]) {
       let func = funcs.shift()
-      if (getFnArgs(func).length == 2) {
-        func(settings, () => {
+      if (getFnArgs(func).length === 2) {
+        func(newsettings, () => {
           preSaveLoop(funcs)
         })
       } else {
-        func(settings)
+        func(newsettings)
         preSaveLoop(funcs)
       }
     } else {
-      cb(settings)
+      cb(newsettings)
     }
   }
 
   preSaveLoop(preSaveArr)
 }
 
-function save(settings, cb) {
-  preSave(settings, (updatedSettings) => {
+function postSave(newSettings, res, cb) {
+  settings.dispatchEvent(new CustomEvent("update", {detail: newSettings}))
+  if (utils.toType(cb) === 'function') {
+    cb()
+  }
+}
+
+function save(cb) {
+  let newSettings = {}
+  settings.querySelectorAll('.section').forEach((section) => {
+    if (section.querySelector('input')) {
+      let sectionSettings = {}
+      section.querySelectorAll('input:not([ignore])').forEach((input) => {
+        let key = input.getAttribute('name') || input.id
+        if (key) {
+          sectionSettings[key] = input.value
+        }
+      })
+      newSettings[section.getAttribute('module')] = sectionSettings
+    }
+  })
+
+  if (fling.user) {
+    fling.user.settings = newSettings
+  }
+
+  preSave(newSettings, (updatedSettings) => {
     fetch('/api/me/settings', {
       credentials: 'include',
       method: 'POST',
-      body: JSON.stringify(settings),
+      body: JSON.stringify(updatedSettings),
       headers: new Headers({'Content-Type': 'application/json'})
-    }).then((r) => r.json()).
-      then((res) => {
-        postSave(res, cb)
+    }).then((res) => res.json())
+      .then((res) => {
+        postSave(newSettings, res, cb)
       })
   })
 }
 
 settings.save = save
-
-function postSave(res, cb) {
-  console.log(res)
-  if (utils.toType(cb) == 'function') {
-    cb()
-  }
-}
 
 fling.settings = settings

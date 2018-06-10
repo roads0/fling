@@ -1,10 +1,12 @@
+/* global fling, utils */
+
 // do this sync so other modules have user data
 
 function getUser() {
   let xhr = new XMLHttpRequest()
   xhr.open("GET", "/api/me", false)
-  xhr.onerror = function (e) {
-    console.error(xhr.statusText)
+  xhr.onerror = function (err) {
+    console.error(err, xhr.statusText)
   }
   xhr.send(null)
 

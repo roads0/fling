@@ -1,5 +1,5 @@
 /* eslint-env browser */
-/* global requireModules */
+/* global require */
 
 
 window.onload = () => {
@@ -9,8 +9,8 @@ window.onload = () => {
   window.fling = fling
 
   // require base modules
-  requireModules.root = '/base/'
-  requireModules([
+  require.root = '/base/'
+  require.many([
     'proxy',
     'actionbar',
     'settings',
@@ -30,8 +30,8 @@ window.onload = () => {
       ]
     }
 
-    requireModules.root = '/modules/'
-    requireModules(plugins)
+    require.root = '/modules/'
+    require.many(plugins)
   })
 
 }

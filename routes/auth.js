@@ -19,17 +19,17 @@ function auth(passport) {
           name: profile.displayName,
           googleId: profile.id,
           token: refreshToken,
-          api_token: require('crypto').randomBytes(92).
-            toString('base64')
+          api_token: require('crypto').randomBytes(92)
+            .toString('base64')
         }).then((newUser) => {
           cb(null, newUser)
-        }).
-          catch((err) => {
+        })
+          .catch((err) => {
             console.error(err)
           })
       }
-    }).
-      catch((err) => {
+    })
+      .catch((err) => {
         console.error(err)
       })
     profile.accessToken = accessToken,

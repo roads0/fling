@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * marked - a markdown parser
  * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
@@ -22,39 +24,39 @@
     text: /^[^\n]+/
   }; function n(e) {
     this.tokens = [], this.tokens.links = {}, this.options = e || m.defaults, this.rules = t.normal, this.options.pedantic ? this.rules = t.pedantic : this.options.gfm && (this.options.tables ? this.rules = t.tables : this.rules = t.gfm)
-  }t._label = /(?!\s*\])(?:\\[\[\]]|[^\[\]])+/, t._title = /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/, t.def = p(t.def).replace("label", t._label).
-    replace("title", t._title).
-    getRegex(), t.bullet = /(?:[*+-]|\d+\.)/, t.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/, t.item = p(t.item, "gm").replace(/bull/g, t.bullet).
-    getRegex(), t.list = p(t.list).replace(/bull/g, t.bullet).
-    replace("hr", "\\n+(?=\\1?(?:(?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$))").
-    replace("def", `\\n+(?=${t.def.source})`).
-    getRegex(), t._tag = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", t._comment = /<!--(?!-?>)[\s\S]*?-->/, t.html = p(t.html, "i").replace("comment", t._comment).
-    replace("tag", t._tag).
-    replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).
-    getRegex(), t.paragraph = p(t.paragraph).replace("hr", t.hr).
-    replace("heading", t.heading).
-    replace("lheading", t.lheading).
-    replace("tag", t._tag).
-    getRegex(), t.blockquote = p(t.blockquote).replace("paragraph", t.paragraph).
-    getRegex(), t.normal = f({}, t), t.gfm = f({}, t.normal, {
+  }t._label = /(?!\s*\])(?:\\[\[\]]|[^\[\]])+/, t._title = /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/, t.def = p(t.def).replace("label", t._label)
+    .replace("title", t._title)
+    .getRegex(), t.bullet = /(?:[*+-]|\d+\.)/, t.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/, t.item = p(t.item, "gm").replace(/bull/g, t.bullet)
+    .getRegex(), t.list = p(t.list).replace(/bull/g, t.bullet)
+    .replace("hr", "\\n+(?=\\1?(?:(?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$))")
+    .replace("def", `\\n+(?=${t.def.source})`)
+    .getRegex(), t._tag = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", t._comment = /<!--(?!-?>)[\s\S]*?-->/, t.html = p(t.html, "i").replace("comment", t._comment)
+    .replace("tag", t._tag)
+    .replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/)
+    .getRegex(), t.paragraph = p(t.paragraph).replace("hr", t.hr)
+    .replace("heading", t.heading)
+    .replace("lheading", t.lheading)
+    .replace("tag", t._tag)
+    .getRegex(), t.blockquote = p(t.blockquote).replace("paragraph", t.paragraph)
+    .getRegex(), t.normal = f({}, t), t.gfm = f({}, t.normal, {
     fences: /^ *(`{3,}|~{3,})[ \.]*(\S+)? *\n([\s\S]*?)\n? *\1 *(?:\n+|$)/,
     paragraph: /^/,
     heading: /^ *(#{1,6}) +([^\n]+?) *#* *(?:\n+|$)/
-  }), t.gfm.paragraph = p(t.paragraph).replace("(?!", `(?!${t.gfm.fences.source.replace("\\1", "\\2")}|${t.list.source.replace("\\1", "\\3")}|`).
-    getRegex(), t.tables = f({}, t.gfm, {
+  }), t.gfm.paragraph = p(t.paragraph).replace("(?!", `(?!${t.gfm.fences.source.replace("\\1", "\\2")}|${t.list.source.replace("\\1", "\\3")}|`)
+    .getRegex(), t.tables = f({}, t.gfm, {
     nptable: /^ *([^|\n ].*\|.*)\n *([-:]+ *\|[-| :]*)(?:\n((?:.*[^>\n ].*(?:\n|$))*)\n*|$)/,
     table: /^ *\|(.+)\n *\|?( *[-:]+[-| :]*)(?:\n((?: *[^>\n ].*(?:\n|$))*)\n*|$)/
   }), t.pedantic = f({}, t.normal, {
-    html: p("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", t._comment).
-      replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").
-      getRegex(),
+    html: p("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", t._comment)
+      .replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b")
+      .getRegex(),
     def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/
   }), n.rules = t, n.lex = function(e, t) {
     return new n(t).lex(e)
   }, n.prototype.lex = function(e) {
-    return e = e.replace(/\r\n|\r/g, "\n").replace(/\t/g, "    ").
-      replace(/\u00a0/g, " ").
-      replace(/\u2424/g, "\n"), this.token(e, !0)
+    return e = e.replace(/\r\n|\r/g, "\n").replace(/\t/g, "    ")
+      .replace(/\u00a0/g, " ")
+      .replace(/\u2424/g, "\n"), this.token(e, !0)
   }, n.prototype.token = function(e, n) {
     let a, c, d, f, g, h, i, l, o, p, r, s, u; for (e = e.replace(/^ +$/gm, ""); e;) {
       if ((i = this.rules.newline.exec(e)) && (e = e.substring(i[0].length), i[0].length > 1 && this.tokens.push({type: "space"})), i = this.rules.code.exec(e)) {
@@ -168,10 +170,10 @@
   } function l() {} function o(e) {
     this.tokens = [], this.token = null, this.options = e || m.defaults, this.options.renderer = this.options.renderer || new i(), this.renderer = this.options.renderer, this.renderer.options = this.options
   } function a(e, t) {
-    return e.replace(t ? /&/g : /&(?!#?\w+;)/g, "&amp;").replace(/</g, "&lt;").
-      replace(/>/g, "&gt;").
-      replace(/"/g, "&quot;").
-      replace(/'/g, "&#39;")
+    return e.replace(t ? /&/g : /&(?!#?\w+;)/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
   } function h(e) {
     return e.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi, function(e, t) {
       return (t = t.toLowerCase()) === "colon" ? ":" : t.charAt(0) === "#" ? t.charAt(1) === "x" ? String.fromCharCode(parseInt(t.substring(2), 16)) : String.fromCharCode(Number(t.substring(1))) : ""
@@ -187,36 +189,36 @@
     }
   } function u(e, t) {
     return c[` ${e}`] || (/^[^:]+:\/*[^/]*$/.test(e) ? c[` ${e}`] = `${e}/` : c[` ${e}`] = e.replace(/[^/]*$/, "")), e = c[` ${e}`], t.slice(0, 2) === "//" ? e.replace(/:[\s\S]*/, ":") + t : t.charAt(0) === "/" ? e.replace(/(:\/*[^/]*)[\s\S]*/, "$1") + t : e + t
-  }r._escapes = /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g, r._scheme = /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/, r._email = /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/, r.autolink = p(r.autolink).replace("scheme", r._scheme).
-    replace("email", r._email).
-    getRegex(), r._attribute = /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/, r.tag = p(r.tag).replace("comment", t._comment).
-    replace("attribute", r._attribute).
-    getRegex(), r._label = /(?:\[[^\[\]]*\]|\\[\[\]]?|`[^`]*`|[^\[\]\\])*?/, r._href = /\s*(<(?:\\[<>]?|[^\s<>\\])*>|(?:\\[()]?|\([^\s\x00-\x1f()\\]*\)|[^\s\x00-\x1f()\\])*?)/, r._title = /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/, r.link = p(r.link).replace("label", r._label).
-    replace("href", r._href).
-    replace("title", r._title).
-    getRegex(), r.reflink = p(r.reflink).replace("label", r._label).
-    getRegex(), r.normal = f({}, r), r.pedantic = f({}, r.normal, {
+  }r._escapes = /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g, r._scheme = /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/, r._email = /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/, r.autolink = p(r.autolink).replace("scheme", r._scheme)
+    .replace("email", r._email)
+    .getRegex(), r._attribute = /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/, r.tag = p(r.tag).replace("comment", t._comment)
+    .replace("attribute", r._attribute)
+    .getRegex(), r._label = /(?:\[[^\[\]]*\]|\\[\[\]]?|`[^`]*`|[^\[\]\\])*?/, r._href = /\s*(<(?:\\[<>]?|[^\s<>\\])*>|(?:\\[()]?|\([^\s\x00-\x1f()\\]*\)|[^\s\x00-\x1f()\\])*?)/, r._title = /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/, r.link = p(r.link).replace("label", r._label)
+    .replace("href", r._href)
+    .replace("title", r._title)
+    .getRegex(), r.reflink = p(r.reflink).replace("label", r._label)
+    .getRegex(), r.normal = f({}, r), r.pedantic = f({}, r.normal, {
     strong: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
     em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/,
-    link: p(/^!?\[(label)\]\((.*?)\)/).replace("label", r._label).
-      getRegex(),
-    reflink: p(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", r._label).
-      getRegex()
+    link: p(/^!?\[(label)\]\((.*?)\)/).replace("label", r._label)
+      .getRegex(),
+    reflink: p(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", r._label)
+      .getRegex()
   }), r.gfm = f({}, r.normal, {
-    escape: p(r.escape).replace("])", "~|])").
-      getRegex(),
-    url: p(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("email", r._email).
-      getRegex(),
+    escape: p(r.escape).replace("])", "~|])")
+      .getRegex(),
+    url: p(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("email", r._email)
+      .getRegex(),
     _backpedal: /(?:[^?!.,:;*_~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_~)]+(?!$))+/,
     del: /^~~(?=\S)([\s\S]*?\S)~~/,
-    text: p(r.text).replace("]|", "~]|").
-      replace("|", "|https?://|ftp://|www\\.|[a-zA-Z0-9.!#$%&'*+/=?^_`{\\|}~-]+@|").
-      getRegex()
+    text: p(r.text).replace("]|", "~]|")
+      .replace("|", "|https?://|ftp://|www\\.|[a-zA-Z0-9.!#$%&'*+/=?^_`{\\|}~-]+@|")
+      .getRegex()
   }), r.breaks = f({}, r.gfm, {
-    br: p(r.br).replace("{2,}", "*").
-      getRegex(),
-    text: p(r.gfm.text).replace("{2,}", "*").
-      getRegex()
+    br: p(r.br).replace("{2,}", "*")
+      .getRegex(),
+    text: p(r.gfm.text).replace("{2,}", "*")
+      .getRegex()
   }), s.rules = r, s.output = function(e, t, n) {
     return new s(t, n).output(e)
   }, s.prototype.output = function(e) {
@@ -266,12 +268,12 @@
 
     return e[0].charAt(0) !== "!" ? this.renderer.link(n, r, this.output(e[1])) : this.renderer.image(n, r, a(e[1]))
   }, s.prototype.smartypants = function(e) {
-    return this.options.smartypants ? e.replace(/---/g, "—").replace(/--/g, "–").
-      replace(/(^|[-\u2014/(\[{"\s])'/g, "$1‘").
-      replace(/'/g, "’").
-      replace(/(^|[-\u2014/(\[{\u2018\s])"/g, "$1“").
-      replace(/"/g, "”").
-      replace(/\.{3}/g, "…") : e
+    return this.options.smartypants ? e.replace(/---/g, "—").replace(/--/g, "–")
+      .replace(/(^|[-\u2014/(\[{"\s])'/g, "$1‘")
+      .replace(/'/g, "’")
+      .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, "$1“")
+      .replace(/"/g, "”")
+      .replace(/\.{3}/g, "…") : e
   }, s.prototype.mangle = function(e) {
     if (!this.options.mangle) {
       return e
@@ -325,8 +327,8 @@
   }, i.prototype.link = function(e, t, n) {
     if (this.options.sanitize) {
       try {
-        var r = decodeURIComponent(h(e)).replace(/[^\w:]/g, "").
-          toLowerCase()
+        var r = decodeURIComponent(h(e)).replace(/[^\w:]/g, "")
+          .toLowerCase()
       } catch (e) {
         return n
       } if (r.indexOf("javascript:") === 0 || r.indexOf("vbscript:") === 0 || r.indexOf("data:") === 0) {

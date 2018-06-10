@@ -35,12 +35,12 @@ userSchema.methods.add_todo = function(todo_data, cb) {
     this.todo.push(todo)
     this.save().then(() => {
       cb(null, todo)
-    }).
-      catch((err) => {
+    })
+      .catch((err) => {
         cb(err)
       })
-  }).
-    catch((err) => {
+  })
+    .catch((err) => {
       cb(err)
     })
 }
@@ -50,8 +50,8 @@ userSchema.methods.edit_todo = function(id, change, cb) {
     this.todo.id(id).title = change.edited_todo
     this.save().then(() => {
       cb(null, this.todo.id(id))
-    }).
-      catch((err) => {
+    })
+      .catch((err) => {
         cb(err)
       })
   }
@@ -59,8 +59,8 @@ userSchema.methods.edit_todo = function(id, change, cb) {
     this.todo.id(id).checked = change.checked
     this.save().then(() => {
       cb(null, this.todo.id(id))
-    }).
-      catch((err) => {
+    })
+      .catch((err) => {
         cb(err)
       })
   }
@@ -72,9 +72,7 @@ userSchema.methods.remove_todo = function(todoid, cb) { // http://mongoosejs.com
       if (err) {
         cb(err)
       } else {
-        this.save((err) => {
-          cb(null, true)
-        })
+        cb(null, true)
       }
     })
   })
@@ -86,9 +84,7 @@ userSchema.methods.setting_manager = function(settings, cb) {
     if (err) {
       cb(err)
     } else {
-      this.save((err) => {
-        cb(null, this.toObject().settings)
-      })
+      cb(null, JSON.parse(this.toObject().settings))
     }
   })
 }
@@ -107,15 +103,13 @@ userSchema.methods.plugin_manager = function(plugins, cb) {
 }
 
 userSchema.methods.token_reset = function(cb) {
-  this.api_token = require('crypto').randomBytes(92).
-    toString('base64')
+  this.api_token = require('crypto').randomBytes(92)
+    .toString('base64')
   this.save((err) => {
     if (err) {
       cb(err)
     } else {
-      this.save((err) => {
-        cb(null, this.api_token)
-      })
+      cb(null, this.api_token)
     }
   })
 }

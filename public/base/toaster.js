@@ -1,1 +1,5 @@
-// tODO: add a toaster.
+function toaster() {
+  console.log(arguments)
+}
+
+window.toaster = toaster

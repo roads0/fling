@@ -59,7 +59,10 @@ module.exports = {
         "consistent-this": "error",
         "curly": "error",
         "default-case": "error",
-        "dot-location": "error",
+        "dot-location": [
+          "error",
+          "property"
+        ],
         "dot-notation": [
             "error",
             {
@@ -67,7 +70,7 @@ module.exports = {
             }
         ],
         "eol-last": "error",
-        "eqeqeq": "error",
+        "eqeqeq": "warn",
         "for-direction": "error",
         "func-call-spacing": "off",
         "func-name-matching": "error",
@@ -182,7 +185,7 @@ module.exports = {
         "no-octal-escape": "error",
         "no-param-reassign": "error",
         "no-path-concat": "error",
-        "no-plusplus": "error",
+        "no-plusplus": "off",
         "no-process-env": "off",
         "no-process-exit": "error",
         "no-proto": "error",
@@ -237,7 +240,7 @@ module.exports = {
         "padding-line-between-statements": "error",
         "prefer-arrow-callback": "off",
         "prefer-const": "off",
-        "prefer-destructuring": "error",
+        "prefer-destructuring": "off",
         "prefer-numeric-literals": "error",
         "prefer-promise-reject-errors": "error",
         "prefer-reflect": "error",

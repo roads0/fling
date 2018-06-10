@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 //! moment.js
 //! version : 2.20.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -562,8 +564,8 @@
       sign = number >= 0
 
     return (sign ? forceSign ? '+' : '' : '-') +
-        Math.pow(10, Math.max(0, zerosToFill)).toString().
-          substr(1) + absNumber
+        Math.pow(10, Math.max(0, zerosToFill)).toString()
+          .substr(1) + absNumber
   }
 
   let formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g
@@ -1910,8 +1912,8 @@
   function localeIsPM (input) {
     // iE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
     // using charAt should be more compatible.
-    return String(input).toLowerCase().
-      charAt(0) === 'p'
+    return String(input).toLowerCase()
+      .charAt(0) === 'p'
   }
 
   let defaultLocaleMeridiemParse = /[ap]\.?m?\.?/i
@@ -2522,8 +2524,8 @@
 
   function preprocessRFC2822(s) {
     // remove comments and folding whitespace and replace multiple-spaces with a single space
-    return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').
-      trim()
+    return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ')
+      .trim()
   }
 
   function checkWeekday(weekdayStr, parsedInput, config) {
@@ -3250,10 +3252,10 @@
 
   function isDaylightSavingTime () {
     return (
-      this.utcOffset() > this.clone().month(0).
-        utcOffset() ||
-        this.utcOffset() > this.clone().month(5).
-          utcOffset()
+      this.utcOffset() > this.clone().month(0)
+        .utcOffset() ||
+        this.utcOffset() > this.clone().month(5)
+          .utcOffset()
     )
   }
 
@@ -3379,8 +3381,8 @@
 
     res.months = other.month() - base.month() +
         (other.year() - base.year()) * 12
-    if (base.clone().add(res.months, 'M').
-      isAfter(other)) {
+    if (base.clone().add(res.months, 'M')
+      .isAfter(other)) {
       --res.months
     }
 
@@ -3495,8 +3497,8 @@
       return this.valueOf() > localInput.valueOf()
     }
 
-    return localInput.valueOf() < this.clone().startOf(units).
-      valueOf()
+    return localInput.valueOf() < this.clone().startOf(units)
+      .valueOf()
 
   }
 
@@ -3510,8 +3512,8 @@
       return this.valueOf() < localInput.valueOf()
     }
 
-    return this.clone().endOf(units).
-      valueOf() < localInput.valueOf()
+    return this.clone().endOf(units)
+      .valueOf() < localInput.valueOf()
 
   }
 
@@ -3534,9 +3536,9 @@
     }
     inputMs = localInput.valueOf()
 
-    return this.clone().startOf(units).
-      valueOf() <= inputMs && inputMs <= this.clone().endOf(units).
-      valueOf()
+    return this.clone().startOf(units)
+      .valueOf() <= inputMs && inputMs <= this.clone().endOf(units)
+      .valueOf()
 
   }
 
@@ -3607,8 +3609,8 @@
   hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]'
 
   function toString () {
-    return this.clone().locale('en').
-      format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ')
+    return this.clone().locale('en')
+      .format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ')
   }
 
   function toISOString(keepOffset) {
@@ -3626,8 +3628,8 @@
         return this.toDate().toISOString()
       }
 
-      return new Date(this._d.valueOf()).toISOString().
-        replace('Z', formatMoment(m, 'Z'))
+      return new Date(this._d.valueOf()).toISOString()
+        .replace('Z', formatMoment(m, 'Z'))
 
     }
 
@@ -3674,8 +3676,8 @@
       return createDuration({
         to: this,
         from: time
-      }).locale(this.locale()).
-        humanize(!withoutSuffix)
+      }).locale(this.locale())
+        .humanize(!withoutSuffix)
     }
 
     return this.localeData().invalidDate()
@@ -3693,8 +3695,8 @@
       return createDuration({
         from: this,
         to: time
-      }).locale(this.locale()).
-        humanize(!withoutSuffix)
+      }).locale(this.locale())
+        .humanize(!withoutSuffix)
     }
 
     return this.localeData().invalidDate()
@@ -3799,8 +3801,8 @@
       units = 'day'
     }
 
-    return this.startOf(units).add(1, units === 'isoWeek' ? 'week' : units).
-      subtract(1, 'ms')
+    return this.startOf(units).add(1, units === 'isoWeek' ? 'week' : units)
+      .subtract(1, 'ms')
   }
 
   function valueOf () {
