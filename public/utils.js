@@ -7,9 +7,14 @@
   }
 
   function strToDom(str) {
-    return new DOMParser().parseFromString(str, "text/html").body.childNodes[0]
-  }
+    let template = document.createElement('template')
+    template.innerHTML = str.trim()
+    if (template.content.childNodes.length > 1) {
+      return template.content.cloneNode(true)
+    }
 
+    return template.content.cloneNode(true).childNodes[0]
+  }
   let styleElement = document.createElement('style')
   document.head.appendChild(styleElement)
   let stylesheet = styleElement.sheet

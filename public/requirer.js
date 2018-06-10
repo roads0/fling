@@ -21,7 +21,7 @@
       modPath += opts.ext || '.js'
     }
 
-    return modPath
+    return new URL(modPath, location.origin).href
   }
 
   let modules = {
@@ -36,16 +36,16 @@
     fetch(modPath).then((res) => res.text())
       .then((res) => {
         try {
-          cb(null, evalBetter(res, modPath))
+          cb(evalBetter(res, modPath))
           modules.loaded.push(modPath)
         } catch (err) {
-          cb(err)
+          cb(null, err)
           modules.failed.push(modPath)
           console.error(`Failed to load module ${modPath}:\n${err.message}\n${modPath}:${err.lineNumber}:${err.columnNumber}\n${err.stack}`)
         }
       })
       .catch((err) => {
-        cb(err)
+        cb(null, err)
         modules.failed.push(modPath)
         console.error(`Failed to get module ${modPath}:\n${err.message}`)
       })
@@ -55,9 +55,9 @@
     if (Array.isArray(mods)) {
       if (mods.length > 0) {
         let mod = mods.shift()
-        require(mod, (err) => {
+        require(mod, (loadedMod, err) => {
           if (err) {
-            throw err
+            console.error(err)
           } else {
             require.many(mods, cb)
           }
@@ -77,7 +77,8 @@
   require.manyAsync = (mods, cb) => {
     if (Array.isArray(mods)) {
       if (mods.length > 0) {
-        require(mods.shift(), (err) => {
+        let mod = mods.shift()
+        require(mod, (loadedMod, err) => {
           if (err) {
             console.error(err)
           }

@@ -33,6 +33,10 @@ utils.addCss(`
     color: #fff;
     box-sizing: border-box; }
   .settings .close-btn {
+    display: none;
+  }
+  .settings.show .close-btn {
+    display: block;
     margin: 12px 24px;
     padding: 0px;
     position: fixed;

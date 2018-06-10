@@ -46,7 +46,6 @@ function getWeather() {
     navigator.geolocation.getCurrentPosition(function(position) {
       fetch(`/api/weather/${position.coords.latitude},${position.coords.longitude}?unit=${unit}`, {credentials: 'include'}).then((res) => res.json())
         .then((res) => {
-          console.log(res)
           // eslint-disable-next-line
           weatherEle.innerHTML = `<div class="location">${res.location.name}</div><div class="current"><i class="weathericon fas fa-${iconType(res.current.skycode)}"></i><div class="temp">${res.current.temperature}°${res.location.degreetype}</div></div>`
         })

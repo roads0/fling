@@ -4,7 +4,7 @@
 utils.addCss(`
   .toaster {
     position: absolute;
-    top: 12px;
+    top: 6px;
     left: 12px;
     display: flex;
     flex-direction: column;
@@ -32,6 +32,30 @@ utils.addCss(`
 
   .toast.hide {
     animation: 0.25s flipOut;
+  }
+
+  .toast.good {
+    background: rgba(52, 194, 49, 0.7);
+    border-left: 6px solid rgba(27, 221, 23, 1);
+    color: #000;
+  }
+
+  .toast.warn {
+    background: rgba(252, 216, 53, 0.7);
+    border-left: 6px solid rgba(252, 216, 53, 1);
+    color: #000;
+  }
+
+  .toast.bad {
+    background: rgba(255, 87, 34, 0.7);
+    border-left: 6px solid rgba(255, 87, 34, 1);
+    color: #000;
+  }
+
+  .toast.info {
+    background: rgba(3, 155, 230, 0.7);
+    border-left: 6px solid rgba(3, 155, 230, 1);
+    color: #000;
   }
 
   .toast h1 {
@@ -84,22 +108,28 @@ let toasterEle = document.body.appendChild(utils.strToDom('<div class="toaster">
 
 function animationTime(element) {
   let durString = window.getComputedStyle(element)['animation-duration']
-  if (durString.endsWith('s')) {
+  if (durString.endsWith('ms')) {
+    return parseFloat(durString)
+  } else if (durString.endsWith('s')) {
     return parseFloat(durString) * 1000
+  } else if (durString.endsWith('m')) {
+    return parseFloat(durString) * 1000 * 60
   }
+
+  return parseFloat(durString)
 }
 
-function toaster(title, desc, timeout) {
+function toaster(title, desc, timeout, cls) {
   let toast
   if (desc) {
     toast = toasterEle.appendChild(utils.strToDom(`
-      <div class="toast">
+      <div class="toast ${cls || ''}">
       <h1>${title}</h1>
       <p>${desc}</p>
       </div>`))
   } else {
     toast = toasterEle.appendChild(utils.strToDom(`
-      <div class="toast">
+      <div class="toast ${cls || ''}">
       <p>${title}</p>
       </div>`))
   }
@@ -110,5 +140,22 @@ function toaster(title, desc, timeout) {
     }, animationTime(toast))
   }, timeout || 7500)
 }
+
+toaster.good = (title, desc, timeout) => {
+  toaster(title, desc, timeout, 'good')
+}
+
+toaster.warn = (title, desc, timeout) => {
+  toaster(title, desc, timeout, 'warn')
+}
+
+toaster.bad = (title, desc, timeout) => {
+  toaster(title, desc, timeout, 'bad')
+}
+
+toaster.info = (title, desc, timeout) => {
+  toaster(title, desc, timeout, 'info')
+}
+
 
 window.toaster = toaster

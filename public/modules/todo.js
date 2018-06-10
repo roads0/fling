@@ -1,8 +1,8 @@
 /* eslint-env browser */
-/* global fling, utils */
+/* global fling, utils, marked */
 /* eslint-disable max-statements, max-lines*/
 
-require('/lib/marked.js', (marked) => {
+require('/lib/marked.js', () => {
   let todoEle = fling.overlay.appendChild(utils.strToDom(`<div class="todo">
         <div class="list">
           <div class="items"></div>
