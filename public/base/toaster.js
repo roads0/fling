@@ -133,29 +133,41 @@ function toaster(title, desc, timeout, cls) {
       <p>${title}</p>
       </div>`))
   }
+
+  toast.hidden = false
+
+  toast.hide = () => {
+    if (!toast.hidden) {
+      toast.classList.add('hide')
+      setTimeout(() => {
+        toast.remove()
+      }, animationTime(toast))
+    }
+  }
+
   setTimeout(() => {
-    toast.classList.add('hide')
-    setTimeout(() => {
-      toast.remove()
-    }, animationTime(toast))
+    toast.hide()
   }, timeout || 7500)
+
+  toast.addEventListener('click', () => {
+    if (!toast.hidden) {
+      toast.classList.add('hide')
+      setTimeout(() => {
+        toast.remove()
+      }, animationTime(toast))
+    }
+  })
+
+  return toast
 }
 
-toaster.good = (title, desc, timeout) => {
-  toaster(title, desc, timeout, 'good')
-}
+toaster.good = (title, desc, timeout) => toaster(title, desc, timeout, 'good')
 
-toaster.warn = (title, desc, timeout) => {
-  toaster(title, desc, timeout, 'warn')
-}
+toaster.warn = (title, desc, timeout) => toaster(title, desc, timeout, 'warn')
 
-toaster.bad = (title, desc, timeout) => {
-  toaster(title, desc, timeout, 'bad')
-}
+toaster.bad = (title, desc, timeout) => toaster(title, desc, timeout, 'bad')
 
-toaster.info = (title, desc, timeout) => {
-  toaster(title, desc, timeout, 'info')
-}
+toaster.info = (title, desc, timeout) => toaster(title, desc, timeout, 'info')
 
 
 window.toaster = toaster
