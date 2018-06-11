@@ -163,7 +163,7 @@ function findClosest(str, match, index) {
 /* eslint-enable */
 
 function getListing(subreddit, cb) {
-  fetch.proxy(`https://reddit.com/r/${subreddit}.json`).then((res) => res.json())
+  fetch.proxy(`https://reddit.com/r/${subreddit}/top.json?t=week`).then((res) => res.json())
     .then((res) => {
       cb(res)
     })
