@@ -130,43 +130,44 @@ router.delete('/todo/:id', (req, res, next) => {
 })
 
 router.post('/me/settings', (req, res, next) => {
-  let count = 0
-  let validReddits = [],
-    invalidReddits = []
-  if (Array.isArray(req.body.subreddits) && req.body.subreddits.length > 0) {
-    req.body.subreddits.forEach((reddit) => {
-      check_subreddit(reddit, (err, valid) => {
-        if (err || !valid) {
-          invalidReddits.push(reddit)
-        } else {
-          validReddits.push(reddit)
-        }
-        count++
-        if (count == req.body.subreddits.length) {
-          req.body.subreddits = validReddits
-          req.user.setting_manager(req.body, (err, setting) => {
-            if (err) {
-              next(err)
-            } else {
-              setting.subreddits = {
-                valid: validReddits,
-                invalid: invalidReddits
-              }
-              res.json(setting)
-            }
-          })
-        }
-      })
-    })
-  } else {
-    req.user.setting_manager(req.body, (err, setting) => {
-      if (err) {
-        next(err)
-      } else {
-        res.json(setting)
-      }
-    })
-  }
+  // let count = 0
+  // let invalidReddits = [],
+  //   validReddits = []
+  //
+  // if (Array.isArray(req.body.subreddits) && req.body.subreddits.length > 0) {
+  //   req.body.subreddits.forEach((reddit) => {
+  //     check_subreddit(reddit, (err, valid) => {
+  //       if (err || !valid) {
+  //         invalidReddits.push(reddit)
+  //       } else {
+  //         validReddits.push(reddit)
+  //       }
+  //       count++
+  //       if (count == req.body.subreddits.length) {
+  //         req.body.subreddits = validReddits
+  //         req.user.setting_manager(req.body, (err, setting) => {
+  //           if (err) {
+  //             next(err)
+  //           } else {
+  //             setting.subreddits = {
+  //               valid: validReddits,
+  //               invalid: invalidReddits
+  //             }
+  //             res.json(setting)
+  //           }
+  //         })
+  //       }
+  //     })
+  //   })
+  // } else {
+  req.user.setting_manager(req.body, (err, setting) => {
+    if (err) {
+      next(err)
+    } else {
+      res.json(setting)
+    }
+  })
+  // }
 })
 
 router.post('/me/plugins', (req, res, next) => {
@@ -177,6 +178,10 @@ router.post('/me/plugins', (req, res, next) => {
       res.json(plugins)
     }
   })
+})
+
+router.get('/pkg.json', function(req, res, next) {
+  res.json(require('../package.json'))
 })
 
 module.exports = router

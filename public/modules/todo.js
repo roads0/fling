@@ -47,6 +47,7 @@ require('/lib/marked.js', () => {
       padding: 0px 12px;
       overflow-y: auto;
       background: rgba(34, 34, 34, 0.7);
+      border-bottom-left-radius: 12px;
       overflow: hidden;
       transition: max-height 1s, padding 1s;
       animation: fadeOutUp 0.5s 1 normal both running;}

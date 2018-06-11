@@ -166,6 +166,7 @@ toaster.good = (title, desc, timeout) => toaster(title, desc, timeout, 'good')
 toaster.warn = (title, desc, timeout) => toaster(title, desc, timeout, 'warn')
 
 toaster.bad = (title, desc, timeout) => toaster(title, desc, timeout, 'bad')
+toaster.err = toaster.bad
 
 toaster.info = (title, desc, timeout) => toaster(title, desc, timeout, 'info')
 
