@@ -88,7 +88,7 @@ router.get('/background', (req, res, next) => {
   })
 })
 
-router.post('/todo/create', (req, res, next) => {
+router.post('/todo/create', checkAuth, (req, res, next) => {
   if (!req.body || !req.body.title) {
     res.status(400).json({err: 'missing title param!'})
   } else {
@@ -102,7 +102,7 @@ router.post('/todo/create', (req, res, next) => {
   }
 })
 
-router.post('/todo/edit/:id', (req, res, next) => {
+router.post('/todo/edit/:id', checkAuth, (req, res, next) => {
   if (req.body) {
     req.user.edit_todo(req.params.id, {
       edited_todo: req.body.edited_todo,
@@ -119,7 +119,7 @@ router.post('/todo/edit/:id', (req, res, next) => {
   }
 })
 
-router.delete('/todo/:id', (req, res, next) => {
+router.delete('/todo/:id', checkAuth, (req, res, next) => {
   req.user.remove_todo(req.params.id, (err, todo) => {
     if (err) {
       next(err)
@@ -129,7 +129,7 @@ router.delete('/todo/:id', (req, res, next) => {
   })
 })
 
-router.post('/me/settings', (req, res, next) => {
+router.post('/me/settings', checkAuth, (req, res, next) => {
   // let count = 0
   // let invalidReddits = [],
   //   validReddits = []
@@ -170,7 +170,7 @@ router.post('/me/settings', (req, res, next) => {
   // }
 })
 
-router.post('/me/plugins', (req, res, next) => {
+router.post('/me/plugins', checkAuth, (req, res, next) => {
   req.user.plugin_manager(req.body, (err, plugins) => {
     if (err) {
       next(err)
@@ -180,7 +180,7 @@ router.post('/me/plugins', (req, res, next) => {
   })
 })
 
-router.get('/pkg.json', function(req, res, next) {
+router.get('/pkg.json', (req, res, next) => {
   res.json(require('../package.json'))
 })
 

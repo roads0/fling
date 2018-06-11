@@ -58,6 +58,7 @@
         require(mod, (loadedMod, err) => {
           if (err) {
             console.error(err)
+            require.many(mods, cb)
           } else {
             require.many(mods, cb)
           }

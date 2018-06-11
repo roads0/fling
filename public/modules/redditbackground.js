@@ -112,7 +112,7 @@ if (fling.user && fling.user.settings.background && utils.toType(fling.user.sett
 } else if (fling.user && fling.user.settings.background && utils.toType(fling.user.settings.background.subreddits) === 'string') {
   fling.user.settings.background.subreddits = fling.user.settings.background.subreddits.replace(/ /g, '').split(',')
   redditsettings.querySelector('.subreddits').value = fling.user.settings.background.subreddits.join(', ')
-} else if (fling.user.settings.background) {
+} else if (fling.user && fling.user.settings.background) {
   fling.user.settings.background.subreddits = [
     'EarthPorn',
     'SpacePorn',

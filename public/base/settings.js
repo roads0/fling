@@ -161,19 +161,19 @@ function save(cb) {
 
   if (fling.user) {
     fling.user.settings = newSettings
+    preSave(newSettings, (updatedSettings) => {
+      fetch('/api/me/settings', {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(updatedSettings),
+        headers: new Headers({'Content-Type': 'application/json'})
+      }).then((res) => res.json())
+        .then((res) => {
+          postSave(newSettings, res, cb)
+        })
+    })
   }
 
-  preSave(newSettings, (updatedSettings) => {
-    fetch('/api/me/settings', {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify(updatedSettings),
-      headers: new Headers({'Content-Type': 'application/json'})
-    }).then((res) => res.json())
-      .then((res) => {
-        postSave(newSettings, res, cb)
-      })
-  })
 }
 
 settings.save = save
