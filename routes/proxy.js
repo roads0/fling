@@ -3,7 +3,7 @@ let request = require('request')
 module.exports = (req, res) => {
   let url = req.originalUrl.split('?')
   url.shift()
-  url = url.join()
+  url = url.join('?')
   if (url) {
     req.pipe(request(url)).pipe(res)
   } else {
