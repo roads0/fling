@@ -5,9 +5,12 @@
 
   function evalBetter(str, src) {
     try {
-      return eval(`${str}\n\n//@ sourceURL=${src}`) // eslint-disable-line
+      // return eval(`${str}\n\n//@ sourceURL=${src}`) // eslint-disable-line
+      return eval(`${str}\n\n//@ sourceURL=${src}`)
     } catch (err) {
-      throw err
+      console.error(err)
+
+      return null
     }
   }
 
