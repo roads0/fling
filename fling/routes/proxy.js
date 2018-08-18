@@ -1,18 +1,21 @@
 const express = require('express')
 const request = require('request')
+const URL = require('url')
 const router = express.Router()
 
 router.get('/', (req, res) => {
   let url = req.originalUrl.split('?')
+  let valid
   url.shift()
+
   try {
-    url = new URL(url.join('?'))
+    valid = URL.parse(url.join('?'))
   } catch (err) {
-    url = null
+    valid = null
   }
 
-  if (url) {
-    req.pipe(request(url.toString())).pipe(res)
+  if (valid) {
+    req.pipe(request(URL.format(valid))).pipe(res)
   } else {
     res.status(400).send('you need to provide a url!')
   }
@@ -21,7 +24,7 @@ router.get('/', (req, res) => {
 router.get('/nobrowser', (req, res, next) => {
   let url = req.originalUrl.split('?').slice(1)
   try {
-    url = new URL(url.join('?'))
+    url = URL.parse(url.join('?'))
 
     let headers = Object.assign({}, req.headers)
     Reflect.deleteProperty(headers, 'referer')
@@ -29,7 +32,7 @@ router.get('/nobrowser', (req, res, next) => {
     headers.host = url.host
 
     let options = {
-      url: url.toString(),
+      url: URL.format(url),
       headers
     }
 

@@ -1,0 +1,30 @@
+version: '3'
+services:
+  fling:
+    build: ./fling
+    container_name: "fling"
+    image: debian/latest
+    environment:
+      - NODE_ENV=development
+      - FOO=bar
+    volumes:
+      - ./fling:/var/www:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    ports:
+      - "6789:6789"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    # restart: on-failure
+  mongodb:
+    image: mongo:latest
+    container_name: "mongo"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles --logpath=/dev/null # --quiet

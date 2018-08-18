@@ -1,0 +1,23 @@
+{
+    "protocol": "sftp",
+    "host": "home.roads.pw",
+    "port": 27,
+    "user": "dev",
+    "pass": "",
+    "promptForPass": false,
+    "remote": "/home/dev/fling",
+    "local": "",
+    "agent": "",
+    "privatekey": "~/.ssh/id_rsa",
+    "passphrase": "",
+    "hosthash": "",
+    "ignorehost": true,
+    "connTimeout": 10000,
+    "keepalive": 10000,
+    "keyboardInteractive": false,
+    "keyboardInteractiveForPass": false,
+    "remoteCommand": "",
+    "remoteShell": "",
+    "watch": [],
+    "watchTimeout": 500
+}
